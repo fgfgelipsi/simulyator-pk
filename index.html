@@ -390,11 +390,23 @@ h3{margin:18px 0 8px;font-size:15px;color:#cfd5e3}
 .ri{flex:none;width:92px;background:var(--p2);border:2px solid;border-radius:10px;padding:4px}.ri svg{width:100%;height:64px;display:block}.ri small{display:block;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rmark{position:absolute;left:50%;top:0;bottom:0;width:3px;margin-left:-1.5px;background:#facc15;box-shadow:0 0 10px #facc15}
 body.isadm .logo{font-size:0!important}body.isadm .logo::first-letter{font-size:18px}
+.profcard{display:flex;gap:12px;align-items:center;background:var(--p);border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:8px}
+.pav{width:64px;height:64px;flex:none;border-radius:50%;font-size:34px;background:linear-gradient(135deg,#1e3a8a,#7e22ce);border:2px solid #60a5fa;display:flex;align-items:center;justify-content:center;padding:0}
+.pinfo{min-width:0}.pinfo b{font-size:19px;display:block}.pid{font-size:14px;margin:3px 0;display:flex;align-items:center;gap:6px}.pid span{font-family:monospace;font-weight:800;color:#93c5fd;letter-spacing:1px;font-size:16px}.pid .btn{width:auto;margin:0;padding:3px 8px}.pinfo small{display:block;font-size:11px}
+.avpick{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin-top:6px;background:var(--p);border:1px solid var(--line);border-radius:12px;padding:6px}.avpick button{font-size:22px;background:none;border-radius:8px;padding:4px 0}.avpick button.on{background:var(--p2);outline:2px solid #60a5fa}
+.pstats{display:grid;grid-template-columns:1fr 1fr;gap:6px}.pstats div{background:var(--p);border:1px solid var(--line);border-radius:10px;padding:7px 9px}.pstats small{display:block;color:var(--m);font-size:11px}.pstats b{font-size:14px}
+.setlist{background:var(--p);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.setrow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--line);cursor:pointer}.setrow:last-child{border-bottom:none}.setrow b{font-size:14px;display:block}.setrow small{color:var(--m);font-size:11px}
+.tgl{flex:none;width:44px;height:26px;border-radius:99px;background:#374151;position:relative;transition:.2s}.tgl i{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}.tgl.on{background:#22c55e}.tgl.on i{left:21px}
+.glist{margin-top:4px}
+.giftbox{background:#0f1a2e;border:1px solid #2563eb;border-radius:12px;padding:8px 10px}
+.giftres{margin-top:8px;background:#0b1220;border:1px dashed #3b82f6;border-radius:10px;padding:8px;font-size:13px}.gcode{font-family:monospace;font-size:11px;word-break:break-all;background:#000;border-radius:6px;padding:6px;user-select:all;color:#93c5fd}
+body.noanim .fan,body.noanim .rgb,body.noanim .rgbf{animation:none!important}
 </style>
 <link rel="manifest" href="manifest.json"><meta name="theme-color" content="#0b0d12"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"></head>
 <body>
 <header>
-  <div class="hrow"><div class="logo">🖥️ <span>Симулятор </span>ПК</div><div class="row" style="gap:6px;flex-wrap:nowrap"><button class="upb" id="admTop" title="Админ-панель" style="display:none;background:#7f1d1d;border-color:#dc2626">🛡️</button><button class="upb" id="sndBtn">🔊</button><button class="upb" data-tab="nft" title="NFT">🖼️</button><button class="upb" data-tab="farm" title="Майнинг">⛏️</button><button class="upb" data-tab="up" title="Прокачка">⬆️</button><div class="money" id="money">$0</div></div></div>
+  <div class="hrow"><div class="logo">🖥️ <span>Симулятор </span>ПК</div><div class="row" style="gap:6px;flex-wrap:nowrap"><button class="upb" id="admTop" title="Админ-панель" style="display:none;background:#7f1d1d;border-color:#dc2626">🛡️</button><button class="upb" data-tab="prof" title="Профиль" id="profTop">👤</button><button id="sndBtn" style="display:none">🔊</button><button class="upb" data-tab="nft" title="NFT">🖼️</button><button class="upb" data-tab="farm" title="Майнинг">⛏️</button><button class="upb" data-tab="up" title="Прокачка">⬆️</button><div class="money" id="money">$0</div></div></div>
   <div class="tabs">
     <button data-tab="shop" class="on"><b>🛒</b>Магазин</button>
     <button data-tab="build"><b>🔧</b>Сборка</button>
@@ -489,6 +501,11 @@ body.isadm .logo{font-size:0!important}body.isadm .logo::first-letter{font-size:
     <button class="btn" id="farmShopBtn" style="width:100%;margin-top:8px;background:#422006;border-color:#ca8a04;color:#fde047">🏪 Магазин майнинг-фермы</button>
     <h3>🗄️ Риги (нажми на слот)</h3>
     <div id="racks"></div>
+  </section>
+
+  <section id="t-prof">
+    <div class="pshead" style="background:linear-gradient(90deg,#0f766e,#2563eb)">👤 Профиль<small>Твой ID, статистика, подарки и настройки</small></div>
+    <div id="profBody"></div>
   </section>
 
   <section id="t-nft">
@@ -752,7 +769,7 @@ const QUAL={low:['Низкие',.5],med:['Средние',.75],high:['Высок
 
 // ===================== СОСТОЯНИЕ =====================
 let KEY='pcbuilder2d_v1';
-function fresh(){return {money:1500,inv:[],inst:{},uid:1,on:false,hist:[],up:{work:0,disc:0,trade:0,yt:0,ads:0,eye:0},mods:{},orders:[],market:[],mT:0,sold:0,earned:0,my:[],lid:1,desk:{},adst:{},mseed:0,mseedT:0,room:{},hist2:[],farm:{racks:[[null,null,null,null,null,null]],mode:'usd',on:false,t:0},btc:0,nft:[],nftTab:'mine',btcTotal:0,cust:{},daily:{},wheel:'',ev:null,mining:false,stream:false,mute:false,best:0,ach:{},psplus:false,deco:[],lib:['cs2','val','fn','rbx'],bios:{xmp:false,rebar:false,cpu:'normal',fan:'normal',fast:false,rgb:true,boot:'disk'}}}
+function fresh(){return {money:1500,inv:[],inst:{},uid:1,on:false,hist:[],up:{work:0,disc:0,trade:0,yt:0,ads:0,eye:0},mods:{},orders:[],market:[],mT:0,sold:0,earned:0,my:[],lid:1,desk:{},adst:{},mseed:0,mseedT:0,room:{},hist2:[],farm:{racks:[[null,null,null,null,null,null]],mode:'usd',on:false,t:0},btc:0,nft:[],nftTab:'mine',pid:'',avatar:'',set:{},gifts:[],giftUsed:[],btcTotal:0,cust:{},daily:{},wheel:'',ev:null,mining:false,stream:false,mute:false,best:0,ach:{},psplus:false,deco:[],lib:['cs2','val','fn','rbx'],bios:{xmp:false,rebar:false,cpu:'normal',fan:'normal',fast:false,rgb:true,boot:'disk'}}}
 let S;
 try{S=JSON.parse(localStorage.getItem(KEY))||fresh()}catch(e){S=fresh()}
 if(!S.inst)S=fresh();
@@ -914,7 +931,7 @@ function spec0(it){
 let tab='shop',shopCat='cpu',sel=null;
 let lastMoney=S.money;
 function toast(msg,type=''){if(type==='ok')snd('ok');else if(type==='bad')snd('bad');const t=$('#toast');t.textContent=msg;t.className='show '+type;clearTimeout(toast.t);toast.t=setTimeout(()=>t.className='',2600)}
-function renderMoney(){const m=$('#money'),v=S.money,a=Math.abs(v);m.textContent=a>=1e12?'$'+(v/1e12).toFixed(1).replace('.',',')+' трлн':a>=1e9?'$'+(v/1e9).toFixed(1).replace('.',',')+' млрд':a>=1e7?'$'+(v/1e6).toFixed(1).replace('.',',')+' млн':fmt(v);if(S.money!==lastMoney){m.classList.add('bump');setTimeout(()=>m.classList.remove('bump'),160);lastMoney=S.money}}
+function renderMoney(){const m=$('#money'),v=S.money,a=Math.abs(v);m.textContent=!setOn('short')?fmt(v):a>=1e12?'$'+(v/1e12).toFixed(1).replace('.',',')+' трлн':a>=1e9?'$'+(v/1e9).toFixed(1).replace('.',',')+' млрд':a>=1e7?'$'+(v/1e6).toFixed(1).replace('.',',')+' млн':fmt(v);if(S.money!==lastMoney){m.classList.add('bump');setTimeout(()=>m.classList.remove('bump'),160);lastMoney=S.money}}
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
 function showTab(t){
   if(T.running||R.running)return toast('Сначала выйди из игры (✖ Выйти)');
@@ -922,7 +939,7 @@ function showTab(t){
   document.querySelectorAll('section').forEach(s=>s.classList.toggle('on',s.id==='t-'+t));
   render();window.scrollTo(0,0);
 }
-function render(){renderMoney();if(tab==='shop')renderShop();if(tab==='build')renderBuild();if(tab==='mon')renderMon();if(tab==='room')renderRoom();if(tab==='farm')renderFarm();if(tab==='nft')renderNft();if(tab==='msg')renderMsg();if(tab==='sell')renderSell();if(tab==='up')renderUps();if(tab==='mkt')renderMkt();checkAch();if(tab==='up'){renderAch();renderBoard()}updBadge();save()}
+function render(){renderMoney();if(tab==='shop')renderShop();if(tab==='build')renderBuild();if(tab==='mon')renderMon();if(tab==='room')renderRoom();if(tab==='farm')renderFarm();if(tab==='nft')renderNft();if(tab==='prof')renderProf();if(tab==='msg')renderMsg();if(tab==='sell')renderSell();if(tab==='up')renderUps();if(tab==='mkt')renderMkt();checkAch();if(tab==='up'){renderAch();renderBoard()}updBadge();save()}
 
 // ===================== МАГАЗИН =====================
 function renderShop(){
@@ -2728,12 +2745,13 @@ function enterAccount(key,isNew,asAdmin){
   try{data=JSON.parse(localStorage.getItem('pcbuilder2d_v1:'+key))}catch(e){}
   if(!data){try{if(!localStorage.getItem('pcb_migrated')){const old=localStorage.getItem('pcbuilder2d_v1');if(old){data=JSON.parse(old);localStorage.setItem('pcb_migrated','1')}}}catch(e){}}
   KEY='pcbuilder2d_v1:'+key;NICK=a[key].n;IS_ADMIN=key===ADMIN_NICK.toLowerCase();
-  window.LOGGED=true;applySave(data);
-  try{sessionStorage.setItem('pcb_session',key);localStorage.setItem('pcb_remember',key)}catch(e){}
+  window.LOGGED=true;applySave(data);ensurePid(key);applySettings();
+  try{sessionStorage.setItem('pcb_session',key);if(!localStorage.getItem('pcb_noremember'))localStorage.setItem('pcb_remember',key)}catch(e){}
   $('#login').classList.remove('show');$('#nickBadge').textContent=NICK+(IS_ADMIN?' 🛡️':'');$('#adminOpen').style.display=IS_ADMIN?'':'none';$('#admTop').style.display=IS_ADMIN?'':'none';document.body.classList.toggle('isadm',IS_ADMIN);
   showTab('shop');save();dailyCheck();farmOffline();
   toast(isNew?`👋 Аккаунт ${NICK} создан!`:`👋 С возвращением, ${NICK}!`,'ok');
   if(IS_ADMIN&&asAdmin)setTimeout(openAdmin,700);
+  setTimeout(()=>processInbox(key),1500);
 }
 function doLogin(asAdmin){
   const nick=$('#lgNick').value.trim(),pass=$('#lgPass').value,err=$('#lgErr');err.textContent='';
@@ -2759,7 +2777,7 @@ function openAdmin(){
   const grp={...CATS,asic:'ASIC-майнеры'};
   const opts=Object.entries(grp).map(([c,n])=>`<optgroup label="${n}">${CATALOG.filter(i=>i.cat===c).map(i=>`<option value="${i.id}">${esc(i.name)} — ${fmt(i.price)}</option>`).join('')}</optgroup>`).join('');
   const a=accs();
-  $('#sheet').innerHTML=`<div class="pshead" style="background:linear-gradient(90deg,#7f1d1d,#dc2626)">🛡️ Админ-панель<small>Вы вошли как ${NICK} · деньги: ${fmt(S.money)} · ₿ ${S.btc.toFixed(4)}</small></div>
+  $('#sheet').innerHTML=`<div class="pshead" style="background:linear-gradient(90deg,#7f1d1d,#dc2626)">🛡️ Админ-панель<small>Вы вошли как ${NICK} · деньги: ${fmt(S.money)} · ₿ ${S.btc.toFixed(4)}</small></div>${adminGiftHTML()}
   <div class="csec"><b>💰 Деньги</b><div class="haggle" style="margin-top:4px"><input id="adMoney" type="number" inputmode="numeric" value="1000000"><button class="btn sm g" data-ad="money">Выдать</button></div><div class="qk"><button data-adq="1000000">+1M</button><button data-adq="100000000">+100M</button><button data-adq="1000000000">+1B</button><button data-adq="0">Обнулить</button></div></div>
   <div class="csec"><b>₿ Биткоин</b><div class="haggle" style="margin-top:4px"><input id="adBtc" type="number" value="1"><button class="btn sm g" data-ad="btc">Выдать BTC</button></div></div>
   <div class="csec"><b>📦 Выдать предмет</b><div class="haggle" style="margin-top:4px"><select id="adItem" class="adsel">${opts}</select><input id="adQty" type="number" value="1" min="1" max="50" style="max-width:56px;flex:none"><button class="btn sm g" data-ad="item">Выдать</button></div></div>
@@ -2772,7 +2790,7 @@ function openAdmin(){
   </div>
   <div class="csec"><b>👥 Аккаунты на этом устройстве</b>${Object.entries(a).map(([k,v])=>`<div class="accrow"><span>${k===ADMIN_NICK.toLowerCase()?'🛡️':'👤'} ${esc(v.n)}${k===NICK.toLowerCase()?' <span class="mut">(ты)</span>':''}</span>${k===ADMIN_NICK.toLowerCase()||k===NICK.toLowerCase()?'':`<button class="btn sm" data-addel="${esc(k)}">🗑️ Удалить</button>`}</div>`).join('')}</div>
   <button class="btn" data-ad="reset" style="color:#f87171">♻️ Сбросить прогресс этого аккаунта</button><button class="btn" id="clBtn">Закрыть</button>`;
-  sheetBg.classList.add('show');$('#clBtn').onclick=closeSheet;
+  sheetBg.classList.add('show');$('#clBtn').onclick=closeSheet;bindAdminGift();
   $('#sheet').querySelectorAll('[data-adq]').forEach(b=>b.onclick=()=>{const v=+b.dataset.adq;if(v===0)S.money=0;else S.money+=v;adMsg(v?`+${fmt(v)}`:'Деньги обнулены');openAdmin()});
   $('#sheet').querySelectorAll('[data-addel]').forEach(b=>b.onclick=()=>{const k=b.dataset.addel,a2=accs();delete a2[k];saveAccs(a2);try{localStorage.removeItem('pcbuilder2d_v1:'+k)}catch(e){}adMsg('Аккаунт удалён');openAdmin()});
   let resetArm2=0;
@@ -2792,7 +2810,7 @@ function openAdmin(){
     else if(k==='wheel'){S.wheel='';adMsg('Колесо можно крутить снова')}
     else if(k==='orders'){S.orders=[];adMsg('Заказы обновлены')}
     else if(k==='dust'){if(S.room.con)S.room.con.dust=0;adMsg('Пыль убрана')}
-    else if(k==='reset'){if(Date.now()>resetArm2){resetArm2=Date.now()+3000;return toast('Нажми ещё раз, чтобы сбросить','bad')}applySave(null);save();adMsg('Прогресс сброшен');closeSheet();return}
+    else if(k==='reset'){if(Date.now()>resetArm2){resetArm2=Date.now()+3000;return toast('Нажми ещё раз, чтобы сбросить','bad')}applySave(null);ensurePid(NICK.toLowerCase());save();adMsg('Прогресс сброшен');closeSheet();return}
     openAdmin();
   });
 }
@@ -2966,6 +2984,108 @@ $('#t-nft').addEventListener('click',e=>{
   const ci=e.target.closest('[data-cinfo]');if(ci)return openCaseInfo(ci.dataset.cinfo);
 });
 ACH.push({k:'nft1',e:'🖼️',n:'Первый NFT',d:'Получи любой NFT',r:100000,t:()=>(S.nft||[]).length>0},{k:'nftall',e:'👑',n:'Коллекционер NFT',d:'Собери все 11 видов NFT',r:5000000,t:()=>NFT.every(x=>(S.nft||[]).some(o=>o.id===x.id))});
+// ===================== ПРОФИЛЬ, ID, ПОДАРКИ =====================
+const AVATARS=['😎','🤖','👾','🦊','🐱','🐼','🦁','🐸','👻','🧑‍💻','🥷','🐲','🦄','💀','🎮','🔥'];
+function genPid(){const used=new Set(Object.values(accs()).map(v=>v.id));let id;do{id=String(10000000+Math.floor(Math.random()*89999999))}while(used.has(id));return id}
+function ensurePid(key){const a=accs();if(!a[key])return;if(!a[key].id){a[key].id=S.pid||genPid();saveAccs(a)}S.pid=a[key].id}
+// --- коды подарков (работают на любом устройстве) ---
+const GSEC='pcb-gift-v1:Elipsi:7781';
+const gsig=p=>cyrb53(GSEC+p,11).toString(36).slice(0,7);
+const b64e=s=>btoa(unescape(encodeURIComponent(s))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+const b64d=s=>decodeURIComponent(escape(atob(s.replace(/-/g,'+').replace(/_/g,'/'))));
+function makeGift(id,type,val,qty){const n=Date.now().toString(36)+Math.random().toString(36).slice(2,6);const p=[id,type,val,qty||1,n].join('|');return 'GIFT-'+b64e(p)+'-'+gsig(p)}
+function parseGift(code){try{code=String(code).trim().replace(/\s+/g,'');const m=code.match(/^GIFT-([A-Za-z0-9_-]+)-([a-z0-9]+)$/i);if(!m)return null;const p=b64d(m[1]);if(gsig(p)!==m[2].toLowerCase())return null;const [id,type,val,qty,n]=p.split('|');return {id,type,val,qty:Math.max(1,+qty||1),n}}catch(e){return null}}
+function giftDesc(g){const q=g.qty;switch(g.type){case 'm':return '💰 '+fmt(+g.val);case 'b':return '₿ '+fb(+g.val);case 'i':return '📦 '+(BY[g.val]?BY[g.val].name:'предмет')+(q>1?' ×'+q:'');case 'n':return '🖼️ NFT «'+(NBY[g.val]?NBY[g.val].n:'?')+'»'+(q>1?' ×'+q:'');}return '🎁'}
+function redeemGift(code,quiet){
+  const g=parseGift(code);if(!g)return {err:'❌ Неверный код подарка'};
+  if(g.id!==S.pid)return {err:'❌ Этот подарок для другого игрока (ID '+g.id+')'};
+  if(!S.giftUsed)S.giftUsed=[];if(S.giftUsed.includes(g.n))return {err:'Этот подарок уже получен'};
+  if(g.type==='m')S.money+=+g.val;else if(g.type==='b')S.btc+=+g.val;
+  else if(g.type==='i'){if(!BY[g.val])return {err:'❌ Неизвестный предмет'};for(let i=0;i<Math.min(50,g.qty);i++)S.inv.push({u:S.uid++,id:g.val})}
+  else if(g.type==='n'){if(!NBY[g.val])return {err:'❌ Неизвестный NFT'};for(let i=0;i<Math.min(50,g.qty);i++)mintNft(g.val)}
+  else return {err:'❌ Неверный код подарка'};
+  S.giftUsed.push(g.n);if(!S.gifts)S.gifts=[];S.gifts.unshift({t:Date.now(),d:giftDesc(g)});S.gifts=S.gifts.slice(0,30);
+  save();if(!quiet){snd('ok');toast('🎁 Подарок от админа: '+giftDesc(g),'ok')}return {ok:giftDesc(g)};
+}
+function processInbox(key){let box=[];try{box=JSON.parse(localStorage.getItem('pcb_inbox:'+key))||[]}catch(e){}if(!box.length)return;
+  const got=[];box.forEach(c=>{const r=redeemGift(c,true);if(r.ok)got.push(r.ok)});try{localStorage.removeItem('pcb_inbox:'+key)}catch(e){}
+  if(got.length){snd('ok');toast('🎁 Тебе подарок от админа: '+got.join(', '),'ok');render()}}
+// --- админ: подарок по ID ---
+function adminGiftHTML(){
+  const items=Object.entries({...CATS,asic:'ASIC-майнеры'}).map(([c,n])=>`<optgroup label="${n}">${CATALOG.filter(i=>i.cat===c).map(i=>`<option value="${i.id}">${esc(i.name)}</option>`).join('')}</optgroup>`).join('');
+  return `<div class="csec giftbox"><b>🎁 Подарить игроку по ID</b>
+   <div class="haggle" style="margin-top:4px"><input id="gfId" inputmode="numeric" placeholder="ID игрока (8 цифр)" maxlength="8"></div>
+   <div class="seg" id="gfType">${[['m','💰 Деньги'],['b','₿ BTC'],['i','📦 Предмет'],['n','🖼️ NFT']].map(([k,n],i)=>`<button class="${i?'':'on'}" data-gt="${k}">${n}</button>`).join('')}</div>
+   <div class="haggle" style="margin-top:6px"><select id="gfItem" class="adsel" style="display:none">${items}</select><select id="gfNft" class="adsel" style="display:none">${NFT.map(x=>`<option value="${x.id}">${x.n} — ₿${fb(x.p)}</option>`).join('')}</select><input id="gfVal" type="number" inputmode="decimal" value="1000000" placeholder="Сколько"></div>
+   <button class="btn g" id="gfGo" style="width:100%;margin-top:6px">🎁 Подарить</button><div id="gfRes"></div></div>`}
+function bindAdminGift(){
+  let gt='m';const upd=()=>{$('#gfItem').style.display=gt==='i'?'':'none';$('#gfNft').style.display=gt==='n'?'':'none';$('#gfVal').placeholder=gt==='m'?'Сумма $':gt==='b'?'Сколько ₿':'Количество';if(gt==='i'||gt==='n')$('#gfVal').value=1;else if(gt==='b')$('#gfVal').value=10;else $('#gfVal').value=1000000};
+  $('#gfType').querySelectorAll('[data-gt]').forEach(b=>b.onclick=()=>{gt=b.dataset.gt;$('#gfType').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));upd()});
+  $('#gfGo').onclick=()=>{
+    const id=$('#gfId').value.replace(/\D/g,''),res=$('#gfRes');
+    if(id.length!==8){res.innerHTML='<div class="bad" style="margin-top:6px">Введи ID из 8 цифр (он есть у игрока в 👤 Профиле)</div>';return}
+    let val=+$('#gfVal').value,qty=1;
+    if(gt==='i'||gt==='n'){qty=Math.max(1,Math.min(50,Math.round(val)||1));val=gt==='i'?$('#gfItem').value:$('#gfNft').value}
+    else if(!(val>0)){res.innerHTML='<div class="bad" style="margin-top:6px">Введи сумму</div>';return}
+    const code=makeGift(id,gt,val,qty),g=parseGift(code),a=accs(),key=Object.keys(a).find(k=>a[k].id===id);
+    let where='';
+    if(key&&a[key].id===S.pid){redeemGift(code,true);where=`✅ Это твой ID — подарок уже у тебя`}
+    else if(key){let box=[];try{box=JSON.parse(localStorage.getItem('pcb_inbox:'+key))||[]}catch(e){}box.push(code);try{localStorage.setItem('pcb_inbox:'+key,JSON.stringify(box))}catch(e){}where=`✅ Игрок <b>${esc(a[key].n)}</b> есть на этом устройстве — получит подарок при входе`}
+    else where=`Игрока с таким ID нет на этом устройстве. Отправь ему код — он вставит его в 👤 Профиль → «Ввести код подарка»`;
+    res.innerHTML=`<div class="giftres"><div>🎁 ${giftDesc(g)} → ID <b>${id}</b></div><div class="mut" style="font-size:12px;margin:4px 0">${where}</div><div class="gcode" id="gfCode">${code}</div><button class="btn sm" id="gfCopy" style="width:100%;margin-top:4px">📋 Скопировать код</button></div>`;
+    $('#gfCopy').onclick=()=>copyText(code,'Код подарка скопирован');snd('coin');renderMoney();
+  };
+}
+function copyText(t,msg){const ok=()=>toast('📋 '+msg,'ok');try{navigator.clipboard.writeText(t).then(ok,()=>fallbackCopy(t)&&ok())}catch(e){fallbackCopy(t)&&ok()}}
+function fallbackCopy(t){try{const ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();const r=document.execCommand('copy');ta.remove();if(!r)toast(t);return r}catch(e){toast(t);return false}}
+// --- вкладка профиля ---
+function setOn(k,def=true){return S.set&&S.set[k]!==undefined?S.set[k]:def}
+function applySettings(){document.body.classList.toggle('noanim',!setOn('anim'));renderMoney()}
+function renderProf(){
+  const a=accs(),key=NICK.toLowerCase(),acc=a[key]||{},reg=acc.c?new Date(acc.c).toLocaleDateString('ru-RU'):'—';
+  const achN=Object.keys(S.ach||{}).length,av=S.avatar||AVATARS[0];
+  const st=[['💵','Деньги',fmt(S.money)],['📈','Заработано',fmt(S.earned||0)],['🖥️','Продано сборок',S.sold||0],['₿','Намайнено',fb(S.btcTotal||0)],['🖼️','NFT',(S.nft||[]).length],['🏆','Достижения',achN+' / '+ACH.length],['🎮','Игр в Стиме',S.lib.length],['📅','Регистрация',reg]];
+  const tg=(k,n,d,on)=>`<div class="setrow" data-set="${k}"><div><b>${n}</b><small>${d}</small></div><span class="tgl ${on?'on':''}"><i></i></span></div>`;
+  $('#profBody').innerHTML=`<div class="profcard"><button class="pav" id="pAv">${av}</button><div class="pinfo"><b>${esc(NICK)}${IS_ADMIN?' 🛡️':''}</b><div class="pid">ID: <span>${S.pid||'—'}</span> <button class="btn sm" id="pCopy">📋</button></div><small class="mut">По этому ID админ может прислать тебе подарок</small></div></div>
+   <div id="avPick" class="avpick" style="display:none">${AVATARS.map(x=>`<button data-av="${x}" class="${x===av?'on':''}">${x}</button>`).join('')}</div>
+   <h3>📊 Статистика</h3><div class="pstats">${st.map(([e,n,v])=>`<div><small>${e} ${n}</small><b>${v}</b></div>`).join('')}</div>
+   <h3>🎁 Подарки</h3><div class="haggle"><input id="pCode" placeholder="Вставь код подарка GIFT-…" autocomplete="off"><button class="btn sm g" id="pRedeem">Получить</button></div>
+   <div class="glist">${(S.gifts||[]).length?S.gifts.map(g=>`<div class="accrow"><span>${g.d}</span><small class="mut">${new Date(g.t).toLocaleDateString('ru-RU')}</small></div>`).join(''):'<div class="mut" style="font-size:12px;margin-top:6px">Подарков пока нет</div>'}</div>
+   <h3>⚙️ Настройки</h3><div class="setlist">
+    ${tg('snd','🔊 Звук','Звуки кнопок, монет и игр',!S.mute)}
+    ${tg('anim','🌀 Анимации','Крутящиеся вентиляторы и RGB-подсветка',setOn('anim'))}
+    ${tg('short','🔢 Короткие числа','$1,5 млн вместо $1 500 000 в шапке',setOn('short'))}
+    ${tg('remember','🔐 Автовход','Входить в аккаунт без пароля на этом устройстве',!localStorage.getItem('pcb_noremember'))}
+   </div>
+   <h3>🔑 Аккаунт</h3>
+   <div class="haggle"><input id="pOld" type="password" placeholder="Старый пароль"><input id="pNew" type="password" placeholder="Новый пароль"></div>
+   <button class="btn" id="pPass" style="width:100%;margin-top:6px">Сменить пароль</button>
+   ${IS_ADMIN?'<button class="btn" id="pAdmin" style="width:100%;margin-top:6px;background:#7f1d1d;border-color:#dc2626">🛡️ Админ-панель</button>':''}
+   <button class="btn" id="pLogout" style="width:100%;margin-top:6px">🚪 Выйти из аккаунта</button>
+   <button class="btn" id="pReset" style="width:100%;margin-top:6px;color:#f87171">♻️ Начать игру заново</button>`;
+}
+let profResetArm=0;
+$('#t-prof').addEventListener('click',e=>{
+  if(e.target.closest('#pAv')){const p=$('#avPick');p.style.display=p.style.display==='none'?'':'none';return}
+  const av=e.target.closest('[data-av]');if(av){S.avatar=av.dataset.av;snd('click');return render()}
+  if(e.target.closest('#pCopy'))return copyText(S.pid,'ID скопирован: '+S.pid);
+  if(e.target.closest('#pRedeem')){const r=redeemGift($('#pCode').value);if(r.err){snd('bad');return toast(r.err,'bad')}$('#pCode').value='';return render()}
+  const sr=e.target.closest('[data-set]');if(sr){const k=sr.dataset.set;if(!S.set)S.set={};
+    if(k==='snd'){S.mute=!S.mute;$('#sndBtn').textContent=S.mute?'🔇':'🔊'}
+    else if(k==='remember'){try{if(localStorage.getItem('pcb_noremember')){localStorage.removeItem('pcb_noremember');localStorage.setItem('pcb_remember',NICK.toLowerCase())}else{localStorage.setItem('pcb_noremember','1');localStorage.removeItem('pcb_remember')}}catch(e){}}
+    else S.set[k]=!setOn(k);
+    applySettings();snd('click');return render()}
+  if(e.target.closest('#pPass')){const a=accs(),key=NICK.toLowerCase(),o=$('#pOld').value,n=$('#pNew').value;
+    if(IS_ADMIN)return toast('Пароль админа меняется только в коде игры','bad');
+    if(cyrb53('pcb:'+o)!==a[key].h){snd('bad');return toast('❌ Старый пароль неверный','bad')}
+    if(n.length<4)return toast('Новый пароль: минимум 4 символа','bad');
+    a[key].h=cyrb53('pcb:'+n);saveAccs(a);toast('✅ Пароль изменён','ok');return render()}
+  if(e.target.closest('#pAdmin'))return openAdmin();
+  if(e.target.closest('#pLogout'))return $('#logoutBtn').click();
+  if(e.target.closest('#pReset')){if(Date.now()>profResetArm){profResetArm=Date.now()+3000;return toast('Нажми ещё раз — весь прогресс пропадёт (ID и ник останутся)','bad')}
+    const pid=S.pid,av=S.avatar;applySave(null);S.pid=pid;S.avatar=av;save();toast('♻️ Игра начата заново');return showTab('shop')}
+});
+
 $('#admTop').onclick=()=>{if(!IS_ADMIN)return;if(T.running||R.running)return toast('Сначала выйди из игры','bad');openAdmin()};
 (function autoLogin(){try{const k=sessionStorage.getItem('pcb_session')||localStorage.getItem('pcb_remember');const a=accs();if(k&&a[k]){enterAccount(k,false,false)}}catch(e){}})();
 // старт
