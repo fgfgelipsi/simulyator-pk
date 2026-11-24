@@ -2966,8 +2966,10 @@ spec0=(o=>it=>it.cat==='os'?(OSD[it.osk].note||'Устанавливается �
 // ===================== АККАУНТЫ И АДМИН-ПАНЕЛЬ =====================
 function cyrb53(str,seed=7){let h1=0xdeadbeef^seed,h2=0x41c6ce57^seed;for(let i=0,ch;i<str.length;i++){ch=str.charCodeAt(i);h1=Math.imul(h1^ch,2654435761);h2=Math.imul(h2^ch,1597334677)}h1=Math.imul(h1^(h1>>>16),2246822507);h1^=Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507);h2^=Math.imul(h1^(h1>>>13),3266489909);return 4294967296*(2097151&h2)+(h1>>>0)}
 const ACCKEY='pcb_accounts',ADMIN_NICK='Elipsi',ADMIN_HASH=8648821014046682;
+const ADMINS={elipsi:{n:'Elipsi',h:8648821014046682},artem:{n:'Artem',h:363970282883982}};
+const isAdm=k=>!!ADMINS[String(k).toLowerCase()];
 let IS_ADMIN=false,NICK='';
-function accs(){let a={};try{a=JSON.parse(localStorage.getItem(ACCKEY))||{}}catch(e){}a[ADMIN_NICK.toLowerCase()]={...(a[ADMIN_NICK.toLowerCase()]||{c:0}),h:ADMIN_HASH,n:ADMIN_NICK};return a}
+function accs(){let a={};try{a=JSON.parse(localStorage.getItem(ACCKEY))||{}}catch(e){}for(const k in ADMINS)a[k]={...(a[k]||{c:0}),h:ADMINS[k].h,n:ADMINS[k].n,banned:false};return a}
 function saveAccs(a){try{localStorage.setItem(ACCKEY,JSON.stringify(a))}catch(e){}}
 function applySave(obj){
   S=obj&&obj.inst?obj:fresh();
@@ -2981,7 +2983,7 @@ function enterAccount(key,isNew,asAdmin){
   const a=accs();let data=null;
   try{data=JSON.parse(localStorage.getItem('pcbuilder2d_v1:'+key))}catch(e){}
   if(!data){try{if(!localStorage.getItem('pcb_migrated')){const old=localStorage.getItem('pcbuilder2d_v1');if(old){data=JSON.parse(old);localStorage.setItem('pcb_migrated','1')}}}catch(e){}}
-  KEY='pcbuilder2d_v1:'+key;NICK=a[key].n;IS_ADMIN=key===ADMIN_NICK.toLowerCase();
+  KEY='pcbuilder2d_v1:'+key;NICK=a[key].n;IS_ADMIN=isAdm(key);
   window.LOGGED=true;applySave(data);ensurePid(key);applySettings();{const a2=accs();if(a2[key]){a2[key].last=Date.now();saveAccs(a2)}}
   try{sessionStorage.setItem('pcb_session',key);if(!localStorage.getItem('pcb_noremember'))localStorage.setItem('pcb_remember',key)}catch(e){}
   $('#login').classList.remove('show');$('#nickBadge').textContent=NICK+(IS_ADMIN?' 🛡️':'');$('#adminOpen').style.display=IS_ADMIN?'':'none';$('#admTop').style.display=IS_ADMIN?'':'none';document.body.classList.toggle('isadm',IS_ADMIN);
@@ -2997,9 +2999,9 @@ function doLogin(asAdmin){
   if(!/^[\wа-яА-ЯёЁ.\- ]+$/.test(nick))return err.textContent='В нике только буквы, цифры, точка и дефис';
   if(pass.length<4)return err.textContent='Пароль: минимум 4 символа';
   const h=cyrb53('pcb:'+pass),a=accs(),key=nick.toLowerCase();
-  if(asAdmin&&(nick!==ADMIN_NICK||h!==ADMIN_HASH)){snd('bad');return err.textContent='❌ Неверный ник или пароль админа'}
+  if(asAdmin&&(!ADMINS[nick.toLowerCase()]||nick!==ADMINS[nick.toLowerCase()].n||h!==ADMINS[nick.toLowerCase()].h)){snd('bad');return err.textContent='❌ Неверный ник или пароль админа'}
   let isNew=false;
-  if(a[key]){if(a[key].h!==h){snd('bad');return err.textContent='❌ Неверный пароль'}if(a[key].banned&&key!==ADMIN_NICK.toLowerCase()){snd('bad');return err.textContent='🚫 Этот аккаунт забанен админом'}}
+  if(a[key]){if(a[key].h!==h){snd('bad');return err.textContent='❌ Неверный пароль'}if(a[key].banned&&!isAdm(key)){snd('bad');return err.textContent='🚫 Этот аккаунт забанен админом'}}
   else{a[key]={h,n:nick,c:Date.now()};isNew=true;saveAccs(a)}
   enterAccount(key,isNew,asAdmin);
 }
@@ -3355,7 +3357,7 @@ setInterval(loadBans,180000);
 function accSave(k){try{return JSON.parse(localStorage.getItem('pcbuilder2d_v1:'+k))}catch(e){return null}}
 function adminPlayersHTML(){
   const a=accs(),me=NICK.toLowerCase(),M=bansMaster()||{ban:[...BANS.ban],reset:{...BANS.reset}};
-  const rows=Object.entries(a).map(([k,v])=>{const sv=k===me?S:accSave(k)||{},adm=k===ADMIN_NICK.toLowerCase();
+  const rows=Object.entries(a).map(([k,v])=>{const sv=k===me?S:accSave(k)||{},adm=isAdm(k);
     return `<div class="plrow ${v.banned?'banned':''}"><div class="plinfo"><b>${adm?'🛡️':v.banned?'🚫':'👤'} ${esc(v.n)}${k===me?' <span class="mut">(ты)</span>':''}</b><small>ID: <b>${v.id||'—'}</b> · ${fmt(sv.money||0)} · ₿${fb(sv.btc||0)}${v.last?' · был: '+new Date(v.last).toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):''}</small></div>
     ${adm||k===me?'':`<div class="plbtns"><button class="btn sm" data-pban="${esc(k)}">${v.banned?'✅ Разбан':'🚫 Бан'}</button><button class="btn sm" data-preset="${esc(k)}">♻️ Обнулить</button><button class="btn sm" data-addel="${esc(k)}">🗑️</button></div>`}</div>`}).join('');
   return `<div class="csec plbox"><b>👥 Игроки на этом устройстве (${Object.keys(a).length})</b>${rows}</div>
