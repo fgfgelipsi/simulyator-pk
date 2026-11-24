@@ -402,6 +402,12 @@ body.isadm .logo{font-size:0!important}body.isadm .logo::first-letter{font-size:
 .giftbox{background:#0f1a2e;border:1px solid #2563eb;border-radius:12px;padding:8px 10px}
 .giftres{margin-top:8px;background:#0b1220;border:1px dashed #3b82f6;border-radius:10px;padding:8px;font-size:13px}.gcode{font-family:monospace;font-size:11px;word-break:break-all;background:#000;border-radius:6px;padding:6px;user-select:all;color:#93c5fd}
 body.noanim .fan,body.noanim .rgb,body.noanim .rgbf{animation:none!important}
+#banOv{position:fixed;inset:0;z-index:200;background:rgba(10,0,0,.94);display:none;align-items:center;justify-content:center;padding:20px}
+.banbox{background:var(--p);border:2px solid #dc2626;border-radius:18px;padding:22px;max-width:340px;width:100%;text-align:center}
+.plbox{background:#0f172a;border:1px solid #334155;border-radius:12px;padding:8px 10px}
+.plrow{display:flex;flex-direction:column;gap:5px;padding:8px 0;border-bottom:1px dashed var(--line)}.plrow:last-child{border-bottom:none}.plrow.banned{opacity:.75}.plrow.banned b{color:#f87171}
+.plinfo b{font-size:14px;display:block}.plinfo small{color:var(--m);font-size:11px}.plinfo small b{display:inline;color:#93c5fd;font-size:11px}
+.plbtns{display:flex;gap:5px}.plbtns .btn{flex:1;margin:0!important;width:auto!important;font-size:12px;padding:6px 4px}.plbtns .btn:last-child{flex:none}
 </style>
 <link rel="manifest" href="manifest.json"><meta name="theme-color" content="#0b0d12"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"></head>
 <body>
@@ -544,7 +550,7 @@ body.noanim .fan,body.noanim .rgb,body.noanim .rgbf{animation:none!important}
 
 <script>
 // ===================== ДАННЫЕ =====================
-const CATS={case:'Корпуса',mobo:'Материнки',cpu:'Процессоры',cooler:'Кулеры',ram:'ОЗУ',gpu:'Видеокарты',storage:'Накопители',psu:'Блоки питания',mon:'Мониторы',per:'Периферия',console:'Приставки',tv:'Телевизоры',deco:'Наклейки и фигурки',os:'Флешки с ОС'};
+const CATS={case:'Корпуса',mobo:'Материнки',cpu:'Процессоры',cooler:'Кулеры',ram:'ОЗУ',gpu:'Видеокарты',storage:'Накопители',fan:'Вентиляторы',psu:'Блоки питания',mon:'Мониторы',per:'Периферия',console:'Приставки',tv:'Телевизоры',deco:'Наклейки и фигурки',os:'Флешки с ОС'};
 const CATALOG=[
  {id:'case1',cat:'case',name:'Zalman Mini',price:40,body:'#2a2f3a',edge:'#454c5c',fans:0},
  {id:'case2',cat:'case',name:'DeepCool ATX',price:80,body:'#1d2230',edge:'#5a6478',fans:2},
@@ -728,6 +734,181 @@ const CATALOG=[
  {id:'t5',cat:'tv',name:'Телевизор 65" OLED 4K 120Hz',short:'65" OLED',price:1400,res:'4K',hz:120,inch:65,oled:true},
  {id:'t6',cat:'tv',name:'Телевизор 85" 8K 240Hz 🔮',short:'85" 8K',price:6000,res:'8K',hz:240,inch:85,oled:true,fake:1},
  {id:'t7',cat:'tv',name:'Голо-ТВ 100" 16K 10000Hz 🔮',short:'Голо-ТВ',price:200000,res:'16K',hz:10000,inch:100,oled:true,fake:1},
+ // ===== НОВЫЕ ПРЕДМЕТЫ (обновление «+140 вещей») =====
+ {id:'case17',cat:'case',name:'Lian Li Lancool 216',price:110,body:'#1f2329',edge:'#6b7280',fans:3,rgb:true,air:1.12},
+ {id:'case18',cat:'case',name:'Fractal Torrent',price:190,body:'#202124',edge:'#9ca3af',fans:3,air:1.2},
+ {id:'case19',cat:'case',name:'Phanteks NV7',price:230,body:'#0f1115',edge:'#a78bfa',fans:3,rgb:true,air:1.02},
+ {id:'case20',cat:'case',name:'Montech Air 903 Max White',price:90,body:'#e5e7eb',edge:'#cbd5e1',fans:3,inner:'#f1f5f9',shroud:'#e2e8f0',fanCol:'#cbd5e1',air:1.1},
+ {id:'case21',cat:'case',name:'Cooler Master HAF 700',price:300,body:'#2b2f36',edge:'#ef4444',fans:3,rgb:true,air:1.18},
+ {id:'case22',cat:'case',name:'NZXT H9 Flow White',price:160,body:'#f8fafc',edge:'#e2e8f0',fans:3,rgb:true,inner:'#f8fafc',shroud:'#e5e7eb',fanCol:'#e5e7eb',air:1.06},
+ {id:'case23',cat:'case',name:'be quiet! Pure Base 500DX',price:110,body:'#111',edge:'#f97316',fans:3,rgb:true,air:1.04},
+ {id:'case24',cat:'case',name:'Jonsbo D41 Mesh',price:85,body:'#1e293b',edge:'#64748b',fans:2,air:1.07},
+ {id:'case25',cat:'case',name:'Корпус-лава 🌋',price:2500,body:'#450a0a',edge:'#f97316',fans:3,rgb:true,air:.95,inner:'#1c0505',shroud:'#7c2d12',fanCol:'#fb923c',fake:1},
+ {id:'case26',cat:'case',name:'Корпус-банка газировки 🥤',price:400,body:'#dc2626',edge:'#e5e7eb',fans:1,inner:'#7f1d1d',shroud:'#991b1b',fanCol:'#e5e7eb',fake:1},
+ {id:'case27',cat:'case',name:'Корпус из LEGO 🧱',price:600,body:'#facc15',edge:'#2563eb',fans:2,inner:'#fde68a',shroud:'#ef4444',fanCol:'#2563eb',fake:1},
+ {id:'case28',cat:'case',name:'Призрачный корпус 👻',price:8000,body:'#e2e8f0',edge:'#f8fafc',fans:3,rgb:true,air:1.2,inner:'#cbd5e1',shroud:'#e2e8f0',fanCol:'#f8fafc',fake:1},
+ {id:'case29',cat:'case',name:'Kvant Неоновый куб',price:1500,body:'#0c0a1d',edge:'#22d3ee',fans:3,rgb:true,air:1.15,inner:'#0b0620',shroud:'#1e1b4b',fanCol:'#22d3ee',fake:1},
+ {id:'case30',cat:'case',name:'Корпус-сейф 🔒',price:3000,body:'#374151',edge:'#9ca3af',fans:2,air:.9,inner:'#1f2937',shroud:'#4b5563',fake:1},
+ {id:'case31',cat:'case',name:'Корпус «Космостанция» 🛰️',price:80000,body:'#0f172a',edge:'#e2e8f0',fans:3,rgb:true,air:1.4,inner:'#020617',shroud:'#1e293b',fanCol:'#93c5fd',fake:1},
+ {id:'case32',cat:'case',name:'Корпус «Чёрная дыра» 🕳️',price:1000000,body:'#000',edge:'#7c3aed',fans:3,rgb:true,air:2,inner:'#05010d',shroud:'#1e0b3a',fanCol:'#a855f7',fake:1},
+ {id:'case33',cat:'case',name:'Корпус «Единорог» 🦄',price:12000,body:'#fbcfe8',edge:'#a78bfa',fans:3,rgb:true,air:1.15,inner:'#fdf2f8',shroud:'#f5d0fe',fanCol:'#f0abfc',fake:1},
+ {id:'mb13',cat:'mobo',name:'Gigabyte B860M Aorus Elite',short:'B860M',price:160,socket:'LGA1851',ram:'DDR5',col:'#16181c',acc:'#f97316'},
+ {id:'mb14',cat:'mobo',name:'MSI MAG Z890 Tomahawk',short:'Z890',price:300,socket:'LGA1851',ram:'DDR5',col:'#14161a',acc:'#64748b',bonus:1.03},
+ {id:'mb15',cat:'mobo',name:'ASUS ROG Maximus Z890 Hero',short:'Z890 HERO',price:650,socket:'LGA1851',ram:'DDR5',col:'#0b0b0f',acc:'#dc2626',bonus:1.05,dual:true},
+ {id:'mb16',cat:'mobo',name:'ASRock B550 Steel Legend',short:'B550',price:120,socket:'AM4',ram:'DDR4',col:'#e5e7eb',acc:'#64748b'},
+ {id:'mb17',cat:'mobo',name:'MSI MPG X870E Carbon',short:'X870E',price:480,socket:'AM5',ram:'DDR5',col:'#0d0f12',acc:'#475569',bonus:1.04,dual:true},
+ {id:'mb18',cat:'mobo',name:'ASRock B650M Pro RS',short:'B650M',price:130,socket:'AM5',ram:'DDR5',col:'#1f2937',acc:'#94a3b8'},
+ {id:'mb19',cat:'mobo',name:'Деревянная плата «Буратино» 🪵',short:'БУРАТИНО',price:30,socket:'AM4',ram:'DDR4',col:'#78350f',acc:'#a16207',bonus:.95,fake:1},
+ {id:'mb20',cat:'mobo',name:'Плата-матрёшка 🪆',short:'МАТРЁШКА',price:900,socket:'AM5',ram:'DDR5',col:'#7f1d1d',acc:'#facc15',bonus:1.05,dual:true,ram2:true,fake:1},
+ {id:'mb21',cat:'mobo',name:'Kvant KV9 Titan 🔮',short:'KV9 TITAN',price:4000,socket:'KV9',ram:'DDR6',col:'#12052a',acc:'#c084fc',bonus:1.08,dual:true,ram2:true,fake:1},
+ {id:'mb22',cat:'mobo',name:'Квантовая плата QNT Omega 🧿',short:'QNT OMEGA',price:120000,socket:'QNT',ram:'QRAM',col:'#011018',acc:'#22d3ee',bonus:1.15,dual:true,ram2:true,fake:1},
+ {id:'c16',cat:'cpu',name:'Intel Core Ultra 5 245K',brand:'intel',short:'Ultra 5 245K',price:300,socket:'LGA1851',cores:14,tdp:125,score:82},
+ {id:'c17',cat:'cpu',name:'Intel Core Ultra 7 265K',brand:'intel',short:'Ultra 7 265K',price:390,socket:'LGA1851',cores:20,tdp:125,score:95},
+ {id:'c18',cat:'cpu',name:'Intel Core Ultra 9 285K',brand:'intel',short:'Ultra 9 285K',price:590,socket:'LGA1851',cores:24,tdp:125,score:104},
+ {id:'c19',cat:'cpu',name:'AMD Ryzen 7 9800X3D',brand:'AMD',short:'R7 9800X3D',price:480,socket:'AM5',cores:8,tdp:120,score:118},
+ {id:'c20',cat:'cpu',name:'AMD Ryzen 9 9950X3D',brand:'AMD',short:'R9 9950X3D',price:700,socket:'AM5',cores:16,tdp:170,score:124},
+ {id:'c21',cat:'cpu',name:'AMD Ryzen 5 9600X',brand:'AMD',short:'R5 9600X',price:230,socket:'AM5',cores:6,tdp:65,score:76},
+ {id:'c22',cat:'cpu',name:'AMD Ryzen 7 5700X3D',brand:'AMD',short:'R7 5700X3D',price:230,socket:'AM4',cores:8,tdp:105,score:72},
+ {id:'c23',cat:'cpu',name:'Intel Core i7-14700K',brand:'intel',short:'i7-14700K',price:400,socket:'LGA1700',cores:20,tdp:250,score:90},
+ {id:'c24',cat:'cpu',name:'AMD Ryzen 9 7950X',brand:'AMD',short:'R9 7950X',price:550,socket:'AM5',cores:16,tdp:170,score:98},
+ {id:'c25',cat:'cpu',name:'Kvant K5 Борщ 🍲',brand:'KVANT',short:'K5 Борщ',price:260,socket:'AM5',cores:8,tdp:90,score:85,fake:1},
+ {id:'c26',cat:'cpu',name:'Kvant K11 Титан 🔮',brand:'KVANT',short:'K11 Титан',price:5000,socket:'KV9',cores:128,tdp:450,score:300,fake:1},
+ {id:'c27',cat:'cpu',name:'Квантовый Q-CORE Ultra 🧿',brand:'QUANT',short:'Q-CORE Ultra',price:150000,socket:'QNT',cores:4096,tdp:1200,score:3000,fake:1},
+ {id:'c28',cat:'cpu',name:'Гиперновая HN-9 💥',brand:'QUANT',short:'HN-9',price:900000,socket:'QNT',cores:99999,tdp:2000,score:8000,fake:1},
+ {id:'c29',cat:'cpu',name:'Калькулятор Casio 🧮',brand:'KVANT',short:'CASIO',price:2,socket:'AM4',cores:1,tdp:1,score:5,fake:1},
+ {id:'k17',cat:'cooler',name:'Arctic Freezer 36',price:35,type:'tower',max:200,fan:'#111827'},
+ {id:'k18',cat:'cooler',name:'Thermalright Phantom Spirit 120',price:45,type:'tower',max:240,fan:'#e5e7eb'},
+ {id:'k19',cat:'cooler',name:'Noctua NH-D15 G2',price:150,type:'tower',max:280,fan:'#7a4a2f'},
+ {id:'k20',cat:'cooler',name:'DeepCool LS720',price:140,type:'aio',max:330},
+ {id:'k21',cat:'cooler',name:'Arctic Liquid Freezer III 420',price:160,type:'aio',max:380},
+ {id:'k22',cat:'cooler',name:'ASUS ROG Ryujin III 360',price:300,type:'aio',max:360},
+ {id:'k23',cat:'cooler',name:'Corsair iCUE Link Titan 360',price:220,type:'aio',max:350},
+ {id:'k24',cat:'cooler',name:'Холодильник «Бирюса» 🧊',price:500,type:'tower',max:400,fan:'#e5e7eb',fake:1},
+ {id:'k25',cat:'cooler',name:'Винт от вертолёта 🚁',price:900,type:'tower',max:600,fan:'#4d7c0f',fake:1},
+ {id:'k26',cat:'cooler',name:'Снежный ком ☃️',price:1500,type:'aio',max:800,fake:1},
+ {id:'k27',cat:'cooler',name:'Ледяной дракон 🐉',price:20000,type:'aio',max:2500,fake:1},
+ {id:'k28',cat:'cooler',name:'Кулер «Абсолютный ноль» 🕳️',price:300000,type:'aio',max:10000,fake:1},
+ {id:'r11',cat:'ram',name:'Crucial Pro 32GB DDR5',price:95,type:'DDR5',size:32,speed:5600,mult:1.08,col:'#111'},
+ {id:'r12',cat:'ram',name:'Kingston Fury Beast 32GB DDR5',price:105,type:'DDR5',size:32,speed:6000,mult:1.11,col:'#1f2937'},
+ {id:'r13',cat:'ram',name:'G.Skill Trident Z5 Neo 64GB',price:210,type:'DDR5',size:64,speed:6000,mult:1.13,col:'#0b0b0b',rgb:true},
+ {id:'r14',cat:'ram',name:'T-Force Delta RGB 32GB DDR5 White',price:120,type:'DDR5',size:32,speed:6400,mult:1.13,col:'#f1f5f9',rgb:true},
+ {id:'r15',cat:'ram',name:'Corsair Vengeance 16GB DDR4',price:40,type:'DDR4',size:16,speed:3200,mult:1,col:'#111'},
+ {id:'r16',cat:'ram',name:'G.Skill Ripjaws V 32GB DDR4',price:70,type:'DDR4',size:32,speed:3600,mult:1.04,col:'#b91c1c'},
+ {id:'r17',cat:'ram',name:'Patriot Viper 8GB DDR4',price:22,type:'DDR4',size:8,speed:3000,mult:.9,col:'#111'},
+ {id:'r18',cat:'ram',name:'Память «Склероз» 2GB 🤪',price:3,type:'DDR4',size:2,speed:800,mult:.6,col:'#4d7c0f',fake:1},
+ {id:'r19',cat:'ram',name:'Kvant 64GB DDR6 🔮',price:300,type:'DDR6',size:64,speed:10000,mult:1.2,col:'#6d28d9',rgb:true,fake:1},
+ {id:'r20',cat:'ram',name:'Kvant 256GB DDR6 🔮',price:1500,type:'DDR6',size:256,speed:16000,mult:1.3,col:'#c084fc',rgb:true,fake:1},
+ {id:'r21',cat:'ram',name:'Квантовая память 512GB 🧿',price:9000,type:'QRAM',size:512,speed:30000,mult:1.4,col:'#155e75',rgb:true,fake:1},
+ {id:'r22',cat:'ram',name:'Звёздная память 16TB ⭐',price:300000,type:'QRAM',size:16384,speed:250000,mult:2.2,col:'#fde047',rgb:true,fake:1},
+ {id:'g25',cat:'gpu',name:'NVIDIA RTX 5060 Ti 16GB',short:'RTX 5060 Ti',price:430,score:64,tdp:180,vram:16,fans:2,col:'#0b0f19',acc:'#76b900'},
+ {id:'g26',cat:'gpu',name:'NVIDIA RTX 5070 Ti',short:'RTX 5070 Ti',price:750,score:96,tdp:300,vram:16,fans:3,col:'#0b0f19',acc:'#76b900'},
+ {id:'g27',cat:'gpu',name:'AMD RX 9070 XT',short:'RX 9070 XT',price:600,score:92,tdp:304,vram:16,fans:3,col:'#18181b',acc:'#e2231a'},
+ {id:'g28',cat:'gpu',name:'AMD RX 9070',short:'RX 9070',price:550,score:84,tdp:220,vram:16,fans:3,col:'#18181b',acc:'#e2231a'},
+ {id:'g29',cat:'gpu',name:'AMD RX 9060 XT 16GB',short:'RX 9060 XT',price:350,score:58,tdp:160,vram:16,fans:2,col:'#18181b',acc:'#e2231a'},
+ {id:'g30',cat:'gpu',name:'Intel Arc B580',short:'ARC B580',price:250,score:48,tdp:190,vram:12,fans:2,col:'#0b1220',acc:'#0ea5e9'},
+ {id:'g31',cat:'gpu',name:'NVIDIA RTX 3050',short:'RTX 3050',price:180,score:26,tdp:130,vram:8,fans:2,col:'#1f2937',acc:'#76b900'},
+ {id:'g32',cat:'gpu',name:'NVIDIA RTX 4070',short:'RTX 4070',price:500,score:70,tdp:200,vram:12,fans:2,col:'#0b0f19',acc:'#76b900'},
+ {id:'g33',cat:'gpu',name:'AMD RX 7900 XTX',short:'RX 7900 XTX',price:900,score:108,tdp:355,vram:24,fans:3,col:'#111',acc:'#e2231a'},
+ {id:'g34',cat:'gpu',name:'Видеокарта-тостер 🍞',short:'ТОСТЕР',price:15,score:2,tdp:800,vram:1,fans:0,col:'#9ca3af',acc:'#f97316',fake:1},
+ {id:'g35',cat:'gpu',name:'Zephyr Z11 Aurora',short:'ZEPHYR Z11',price:3000,score:200,tdp:500,vram:32,fans:3,col:'#0c2a4a',acc:'#5eead4',fake:1},
+ {id:'g36',cat:'gpu',name:'Квантум Q-X 20000 Hyper 🔮',short:'Q-X HYPER',price:25000,score:1000,tdp:1100,vram:256,fans:3,col:'#020617',acc:'#e879f9',fake:1},
+ {id:'g37',cat:'gpu',name:'Нейро NX-1 🧠',short:'NEURO NX-1',price:80000,score:2500,tdp:1500,vram:1024,fans:3,col:'#1a0b2e',acc:'#f472b6',fake:1},
+ {id:'g38',cat:'gpu',name:'Сверхновая SN-GPU ☀️',short:'SUPERNOVA',price:1000000,score:9500,tdp:3500,vram:99999,fans:3,col:'#431407',acc:'#fde047',fake:1},
+ {id:'g39',cat:'gpu',name:'Майнинг Мини ⛏️ (0.1 ₿/сек)',short:'МАЙНИНГ МИНИ',price:100000000,score:60,tdp:300,vram:12,fans:2,col:'#14532d',acc:'#86efac',fake:1,bps:.1},
+ {id:'g40',cat:'gpu',name:'Майнинг Мега ⛏️ (10 ₿/сек)',short:'МАЙНИНГ МЕГА',price:10000000000,score:250,tdp:900,vram:48,fans:3,col:'#022c22',acc:'#fbbf24',fake:1,bps:10},
+ {id:'s7',cat:'storage',name:'WD Blue HDD 2TB',short:'HDD 2TB',price:50,kind:'hdd',size:'2TB',load:2.4},
+ {id:'s8',cat:'storage',name:'Crucial MX500 1TB',short:'MX500',price:60,kind:'sata',size:'1TB',load:1.1},
+ {id:'s9',cat:'storage',name:'WD Black SN850X 2TB',short:'SN850X',price:150,kind:'nvme',size:'2TB',load:.33},
+ {id:'s10',cat:'storage',name:'Samsung 9100 Pro 4TB',short:'9100 PRO',price:450,kind:'nvme',size:'4TB',load:.25},
+ {id:'s11',cat:'storage',name:'Crucial T705 2TB',short:'T705',price:280,kind:'nvme',size:'2TB',load:.28},
+ {id:'s12',cat:'storage',name:'Дискета 1.44MB 💾',short:'ДИСКЕТА',price:1,kind:'hdd',size:'1.44MB',load:9,fake:1},
+ {id:'s13',cat:'storage',name:'Kvant HyperDrive 64TB 🔮',short:'HYPER 64TB',price:2500,kind:'nvme',size:'64TB',load:.08,fake:1},
+ {id:'s14',cat:'storage',name:'Хрустальный накопитель ∞ 💎',short:'CRYSTAL ∞',price:500000,kind:'nvme',size:'∞',load:.005,fake:1},
+ {id:'p10',cat:'psu',name:'DeepCool PK550D',price:55,w:550,tier:'80+ Bronze'},
+ {id:'p11',cat:'psu',name:'MSI MAG A750GL',price:95,w:750,tier:'80+ Gold'},
+ {id:'p12',cat:'psu',name:'Corsair RM1000x',price:180,w:1000,tier:'80+ Gold'},
+ {id:'p13',cat:'psu',name:'be quiet! Dark Power 13 1000W',price:300,w:1000,tier:'80+ Titanium'},
+ {id:'p14',cat:'psu',name:'ASUS ROG Thor 1600W',price:520,w:1600,tier:'80+ Titanium'},
+ {id:'p15',cat:'psu',name:'Хомяк в колесе 🐹',price:2,w:100,tier:'80+ Хомяк',fake:1},
+ {id:'p16',cat:'psu',name:'Молния в бутылке 25kW ⚡',price:50000,w:25000,tier:'80+ Гроза',fake:1},
+ {id:'p17',cat:'psu',name:'БП «Чёрная дыра» 1MW 🕳️',price:2000000,w:1000000,tier:'80+ Бесконечный',fake:1},
+ {id:'m9',cat:'mon',slot:'mon',name:'Монитор Samsung Odyssey G5 27" 2K',short:'27" G5',price:280,res:'1440p',hz:165,inch:27,curved:true,wp:['#38bdf8','#0f172a']},
+ {id:'m10',cat:'mon',slot:'mon',name:'Монитор Alienware 27" QD-OLED 360Hz',short:'27" 360Hz',price:800,res:'1440p',hz:360,inch:27,rgb:true,wp:['#22d3ee','#1e1b4b']},
+ {id:'m11',cat:'mon',slot:'mon',name:'Монитор ASUS ROG 27" OLED 480Hz',short:'27" 480Hz',price:1000,res:'1440p',hz:480,inch:27,rgb:true,wp:['#ef4444','#0b0b0f']},
+ {id:'m12',cat:'mon',slot:'mon',name:'Монитор LG UltraGear 32" 4K OLED 240Hz',short:'32" 4K OLED',price:1300,res:'4K',hz:240,inch:32,wp:['#e11d48','#111827']},
+ {id:'m13',cat:'mon',slot:'mon',name:'Монитор-аквариум 🐟',short:'АКВАРИУМ',price:3000,res:'1080p',hz:144,inch:30,fake:1,wp:['#06b6d4','#083344']},
+ {id:'m14',cat:'mon',slot:'mon',name:'Монитор Kvant 8K 5000Hz 🔮',short:'8K 5000Hz',price:60000,res:'8K',hz:5000,inch:55,curved:true,rgb:true,fake:1,wp:['#a78bfa','#020617']},
+ {id:'t8',cat:'tv',name:'Телевизор 75" 4K 144Hz Mini-LED',short:'75" Mini-LED',price:1600,res:'4K',hz:144,inch:75},
+ {id:'t9',cat:'tv',name:'Телевизор 98" 4K 120Hz',short:'98" 4K',price:3500,res:'4K',hz:120,inch:98},
+ {id:'t10',cat:'tv',name:'Проектор 150" 4K',short:'Проектор',price:2500,res:'4K',hz:60,inch:150},
+ {id:'t11',cat:'tv',name:'Мега-ТВ 200" 16K 🔮',short:'Мега-ТВ',price:600000,res:'16K',hz:10000,inch:200,oled:true,fake:1},
+ {id:'x14',cat:'per',slot:'kb',name:'Клавиатура Razer Huntsman V3 Pro',price:250,bonus:.14,col:'#111',rgb:true},
+ {id:'x15',cat:'per',slot:'kb',name:'Клавиатура Wooting 60HE',price:180,bonus:.16,col:'#1f2937',rgb:true},
+ {id:'x16',cat:'per',slot:'kb',name:'Клавиатура-рояль 🎹',price:2000,bonus:.05,col:'#f8fafc',fake:1},
+ {id:'x17',cat:'per',slot:'kb',name:'Kvant Телепат-клавиатура 🔮',price:20000,bonus:.35,col:'#3b0764',rgb:true,fake:1},
+ {id:'x18',cat:'per',slot:'mouse',name:'Мышь Razer DeathAdder V3 Pro',price:150,bonus:.14,col:'#111'},
+ {id:'x19',cat:'per',slot:'mouse',name:'Мышь Logitech G502 X',price:80,bonus:.11,col:'#1f2937',rgb:true},
+ {id:'x20',cat:'per',slot:'mouse',name:'Мышь-сыр 🧀',price:50,bonus:.03,col:'#facc15',fake:1},
+ {id:'x21',cat:'per',slot:'mouse',name:'Kvant Мысленная мышь 🔮',price:15000,bonus:.3,col:'#7c3aed',rgb:true,fake:1},
+ {id:'x22',cat:'per',slot:'head',name:'Наушники SteelSeries Arctis Nova Pro',price:350,bonus:.15,col:'#111',acc:'#e5e7eb'},
+ {id:'x23',cat:'per',slot:'head',name:'Наушники Logitech G Pro X 2',price:250,bonus:.14,col:'#111',acc:'#22c55e'},
+ {id:'x24',cat:'per',slot:'head',name:'Наушники с кошачьими ушками 🐱',price:120,bonus:.08,col:'#fbcfe8',acc:'#f472b6',fake:1},
+ {id:'x25',cat:'per',slot:'pad',name:'Геймпад Xbox Elite 2',price:180,bonus:.14,col:'#111827'},
+ {id:'x26',cat:'per',slot:'pad',name:'Kvant Геймпад-телепат 🔮',price:10000,bonus:.3,col:'#3b0764',edge:1,fake:1},
+ {id:'d11',cat:'deco',kind:'st',name:'Наклейка «EZ»',price:1000,txt:'EZ',bg:'#22c55e',round:1},
+ {id:'d12',cat:'deco',kind:'st',name:'Наклейка «AFK»',price:1000,txt:'AFK',bg:'#64748b'},
+ {id:'d13',cat:'deco',kind:'st',name:'Наклейка «1337»',price:1000,txt:'1337',bg:'#0f172a',fg:'#22c55e'},
+ {id:'d14',cat:'deco',kind:'st',name:'Наклейка «LVL 100»',price:1000,txt:'LVL100',bg:'#f59e0b'},
+ {id:'d15',cat:'deco',kind:'st',name:'Наклейка «BTC»',price:1000,txt:'BTC',bg:'#f7931a',round:1},
+ {id:'d16',cat:'deco',kind:'st',name:'Наклейка «NOOB»',price:1000,txt:'NOOB',bg:'#ec4899'},
+ {id:'d17',cat:'deco',kind:'st',name:'Наклейка «HODL»',price:1000,txt:'HODL',bg:'#facc15',fg:'#111'},
+ {id:'d18',cat:'deco',kind:'st',name:'Наклейка «4K»',price:1000,txt:'4K',bg:'#7c3aed',round:1},
+ {id:'d19',cat:'deco',kind:'st',name:'Наклейка «ПК МЕЧТЫ»',price:1000,txt:'МЕЧТА',bg:'#2563eb'},
+ {id:'d20',cat:'deco',kind:'st',name:'Наклейка «GOD MODE»',price:10000,txt:'GOD',bg:'#a855f7',holo:1,round:1,fake:1},
+ {id:'f11',cat:'deco',kind:'fig',name:'Пингвин 🐧',price:350,emo:'🐧'},
+ {id:'f12',cat:'deco',kind:'fig',name:'Кактус в горшке 🌵',price:150,emo:'🌵'},
+ {id:'f13',cat:'deco',kind:'fig',name:'Сова 🦉',price:600,emo:'🦉'},
+ {id:'f14',cat:'deco',kind:'fig',name:'Ракета 🚀',price:800,emo:'🚀'},
+ {id:'f15',cat:'deco',kind:'fig',name:'Мини-ПК 🖥️',price:900,emo:'🖥️'},
+ {id:'f16',cat:'deco',kind:'fig',name:'Алмазный кристалл 💎',price:50000,emo:'💎',gold:1,fake:1},
+ {id:'a4',cat:'asic',name:'ASIC Шахтёр S19 XP',short:'S19 XP',price:60000,hash:5000,tdp:3000},
+ {id:'a5',cat:'asic',name:'ASIC Картофельный 🥔',short:'Картошка',price:500,hash:50,tdp:200,fake:1},
+ {id:'a6',cat:'asic',name:'Кит-майнер «Акула» 🦈',short:'Акула',price:150000,hash:12000,tdp:3500,fake:1},
+ {id:'mb23',cat:'mobo',name:'Kvant Близнецы Twin-X 🔮',short:'TWIN-X',price:2500,socket:'AM5',ram:'DDR5',col:'#111827',acc:'#38bdf8',bonus:1.05,dual:true,ram2:true,twin:true,fake:1},
+ {id:'mb24',cat:'mobo',name:'Серверная плата Dual-1700 🖧',short:'DUAL-1700',price:1800,socket:'LGA1700',ram:'DDR5',col:'#0b3b2e',acc:'#94a3b8',dual:true,ram2:true,twin:true,fake:1},
+ {id:'mb25',cat:'mobo',name:'Kvant Twin Ultra 1851 🔮',short:'TWIN ULTRA',price:3200,socket:'LGA1851',ram:'DDR5',col:'#1e1b4b',acc:'#f472b6',bonus:1.04,dual:true,ram2:true,twin:true,fake:1},
+ {id:'mb26',cat:'mobo',name:'Kvant KV9 Двойной Overlord 🔮',short:'2× OVERLORD',price:9000,socket:'KV9',ram:'DDR6',col:'#0d0620',acc:'#e879f9',bonus:1.08,dual:true,ram2:true,twin:true,fake:1},
+ {id:'mb27',cat:'mobo',name:'QNT Дуал-Вселенная 🧿',short:'DUAL-UNIVERSE',price:400000,socket:'QNT',ram:'QRAM',col:'#011018',acc:'#facc15',bonus:1.18,dual:true,ram2:true,twin:true,fake:1},
+ {id:'mb28',cat:'mobo',name:'Плата «Двойня» AM4 🪆',short:'ДВОЙНЯ',price:700,socket:'AM4',ram:'DDR4',col:'#7c2d12',acc:'#fdba74',dual:true,ram2:true,twin:true,fake:1},
+ {id:'sf1',cat:'fan',name:'Arctic P12 120мм',price:8,air:.03,col:'#374151'},
+ {id:'sf2',cat:'fan',name:'Noctua NF-A12x25',price:35,air:.05,col:'#a16207'},
+ {id:'sf3',cat:'fan',name:'Lian Li UNI FAN SL RGB',price:30,air:.04,col:'#a78bfa',rgb:true},
+ {id:'sf4',cat:'fan',name:'be quiet! Silent Wings 4',price:25,air:.045,col:'#1f2937'},
+ {id:'sf5',cat:'fan',name:'Corsair LX120 RGB',price:28,air:.04,col:'#f472b6',rgb:true},
+ {id:'sf6',cat:'fan',name:'Вентилятор-ромашка 🌼',price:5,air:.01,col:'#fde047',fake:1},
+ {id:'sf7',cat:'fan',name:'Мотор от пылесоса 🌪️',price:150,air:.12,col:'#ef4444',fake:1},
+ {id:'sf8',cat:'fan',name:'Kvant Турбина 🔮',price:3000,air:.25,col:'#22d3ee',rgb:true,fake:1},
+ {id:'sf9',cat:'fan',name:'Реактивный двигатель ✈️',price:50000,air:.6,col:'#f97316',fake:1},
+ {id:'a7',cat:'asic',name:'ASIC «Термоядерный» ☢️',short:'Термояд',price:1500000,hash:150000,tdp:6000,fake:1},
+ // ===== МИЛЛИАРДНАЯ СЕРИЯ ($1 000 000 000 каждая) =====
+ {id:'bcase',cat:'case',name:'Миллиардный корпус 💰',price:1000000000,body:'#ca8a04',edge:'#fff7ae',fans:3,rgb:true,air:3,inner:'#1c1405',shroud:'#3b2a06',fanCol:'#fde047',engrave:'$1 000 000 000',fake:1,bil:1},
+ {id:'bmb',cat:'mobo',name:'Миллиардная плата 💰',short:'BILLION',price:1000000000,socket:'QNT',ram:'QRAM',col:'#1c1405',acc:'#facc15',bonus:1.3,dual:true,ram2:true,twin:true,fake:1,bil:1},
+ {id:'bcpu',cat:'cpu',name:'Миллиардный процессор 💰',brand:'QUANT',short:'BILLION CPU',price:1000000000,socket:'QNT',cores:1000000,tdp:3000,score:20000,fake:1,bil:1},
+ {id:'bcool',cat:'cooler',name:'Миллиардный кулер 💰',price:1000000000,type:'aio',max:100000,fake:1,bil:1},
+ {id:'bram',cat:'ram',name:'Миллиардная память 1PB 💰',price:1000000000,type:'QRAM',size:1048576,speed:9999999,mult:3,col:'#facc15',rgb:true,fake:1,bil:1},
+ {id:'bgpu',cat:'gpu',name:'Миллиардная видеокарта 💰',short:'BILLION GPU',price:1000000000,score:20000,tdp:5000,vram:1000000,fans:3,col:'#3b2a06',acc:'#fde047',fake:1,bil:1},
+ {id:'bssd',cat:'storage',name:'Миллиардный SSD 1EB 💰',short:'BILLION SSD',price:1000000000,kind:'nvme',size:'1EB',load:.001,fake:1,bil:1},
+ {id:'bpsu',cat:'psu',name:'Миллиардный БП 10MW 💰',price:1000000000,w:10000000,tier:'80+ Миллиардный',fake:1,bil:1},
+ {id:'bfan',cat:'fan',name:'Миллиардный вентилятор 💰',price:1000000000,air:2,col:'#facc15',rgb:true,fake:1,bil:1},
+ {id:'bmon',cat:'mon',slot:'mon',name:'Миллиардный монитор 8K 10000Hz 💰',short:'BILLION',price:1000000000,res:'8K',hz:10000,inch:100,curved:true,rgb:true,fake:1,bil:1,wp:['#fde047','#713f12']},
+ {id:'btv',cat:'tv',name:'Миллиардный телевизор 300" 16K 💰',short:'BILLION ТВ',price:1000000000,res:'16K',hz:10000,inch:300,oled:true,fake:1,bil:1},
+ {id:'bkb',cat:'per',slot:'kb',name:'Миллиардная клавиатура 💰',price:1000000000,bonus:.5,col:'#ca8a04',rgb:true,fake:1,bil:1},
+ {id:'bmouse',cat:'per',slot:'mouse',name:'Миллиардная мышь 💰',price:1000000000,bonus:.5,col:'#ca8a04',rgb:true,fake:1,bil:1},
+ {id:'bpad',cat:'per',slot:'pad',name:'Миллиардный геймпад 💰',price:1000000000,bonus:.5,col:'#facc15',edge:1,fake:1,bil:1},
+ {id:'bhead',cat:'per',slot:'head',name:'Миллиардные наушники 💰',price:1000000000,bonus:.5,col:'#ca8a04',acc:'#fff7ae',fake:1,bil:1},
+ {id:'bst',cat:'deco',kind:'st',name:'Наклейка «$1 000 000 000» 💰',price:1000000000,txt:'$1B',bg:'#ca8a04',fg:'#fff7ae',holo:1,round:1,fake:1,bil:1},
+ {id:'bfig',cat:'deco',kind:'fig',name:'Гора золотых слитков 💰',price:1000000000,emo:'💰',gold:1,fake:1,bil:1},
+ {id:'basic',cat:'asic',name:'Миллиардный ASIC 💰',short:'BILLION',price:1000000000,hash:10000000,tdp:10000,fake:1,bil:1},
 ];
 const BY=Object.fromEntries(CATALOG.map(i=>[i.id,i]));
 const KIND={hdd:'жёсткий диск SATA',sata:'SSD SATA',nvme:'SSD NVMe M.2'};
@@ -745,8 +926,14 @@ const ZONES={
  m2b:{acc:'storage',need:'mobo',box:[60,176,100,20],label:'M.2 №2',kind:'nvme',dual:true},
  gpu2:{acc:'gpu',need:'mobo',box:[30,252,215,44],label:'PCIe №2 — вторая видеокарта',dual:true},
  psu:{acc:'psu',need:'case',box:[25,325,130,70],label:'Блок питания'},
+ cpu2:{acc:'cpu',need:'mobo',box:[92,60,50,50],label:'CPU №2',twin:true},
+ cooler2:{acc:'cooler',need:'cpu2',box:[86,54,62,62],label:'Кулер №2'},
+ psu2:{acc:'psu',need:'mobo',box:[22,360,118,44],label:'БП №2',twin:true},
+ sf1:{acc:'fan',need:'case',box:[170,330,46,46],label:'Вент.'},
+ sf2:{acc:'fan',need:'case',box:[221,330,46,46],label:'Вент.'},
+ sf3:{acc:'fan',need:'case',box:[272,330,46,46],label:'Вент.'},
 };
-const ORDER=['mobo','m2','m2b','ram','ram2','cpu','cooler','gpu','gpu2','bay','psu'];
+const ORDER=['mobo','m2','m2b','ram','ram2','cpu','cooler','cpu2','cooler2','gpu','gpu2','bay','psu','psu2','sf1','sf2','sf3'];
 
 const GAMES=[
  {id:'cs2',name:'CS2',e:'🔫',gk:5.5,ck:5.5,th:{sky:['#f6d39b','#e7a965'],far:'#c99b6a',mid:'#a8774b',ground:'#8a6239',acc:'#ffd34d'}},
@@ -763,13 +950,37 @@ const GAMES=[
  {id:'tlou',name:'The Last of Us',e:'🍄',gk:1.3,ck:1.8,heavy:true,th:{sky:['#a7c4a0','#e7e5c9'],far:'#6b8f71',mid:'#57606b',ground:'#4d6b3c',acc:'#fbbf24'}},
  {id:'mk11',name:'Mortal Kombat 11',e:'🥋',gk:5,ck:4.5,cap:60,th:{sky:['#450a0a','#b45309'],far:'#7f1d1d',mid:'#292524',ground:'#44403c',acc:'#facc15',night:true}},
  {id:'fh6',name:'Forza Horizon 6',e:'🏎️',gk:1.8,ck:2.4,heavy:true,th:{sky:['#93c5fd','#fecdd3'],far:'#cbd5e1',mid:'#64748b',ground:'#475569',acc:'#ef4444'}},
+ {id:'dota',name:'Dota 2',e:'🛡️',gk:4.5,ck:3.2,pp:'w3',th:{sky:['#7c2d12','#fca5a5'],far:'#57534e',mid:'#365314',ground:'#3f6212',acc:'#ef4444'}},
+ {id:'lol',name:'League of Legends',e:'⚔️',gk:8,ck:5,pp:'w3',th:{sky:['#1e3a8a','#93c5fd'],far:'#1e40af',mid:'#14532d',ground:'#166534',acc:'#fbbf24'}},
+ {id:'apex',name:'Apex Legends',e:'🔺',gk:3.2,ck:3.4,pp:'val',th:{sky:['#fb923c','#fde68a'],far:'#a16207',mid:'#7c2d12',ground:'#78350f',acc:'#dc2626'}},
+ {id:'pubg',name:'PUBG',e:'🍳',gk:2.4,ck:2.6,pp:'cs',th:{sky:['#bae6fd','#f1f5f9'],far:'#84cc16',mid:'#4d7c0f',ground:'#65a30d',acc:'#facc15'}},
+ {id:'cod',name:'Call of Duty: Warzone',e:'🪖',gk:2,ck:2.4,heavy:true,pp:'cs',th:{sky:['#94a3b8','#e2e8f0'],far:'#64748b',mid:'#475569',ground:'#57534e',acc:'#84cc16'}},
+ {id:'bf6',name:'Battlefield 6',e:'💥',gk:1.6,ck:2,heavy:true,pp:'cs',th:{sky:['#f97316','#fecaca'],far:'#78716c',mid:'#44403c',ground:'#57534e',acc:'#38bdf8'}},
+ {id:'ow2',name:'Overwatch 2',e:'🦸',gk:4.5,ck:4.5,cap:600,pp:'val',th:{sky:['#60a5fa','#fef3c7'],far:'#f59e0b',mid:'#e2e8f0',ground:'#94a3b8',acc:'#f97316'}},
+ {id:'hd2',name:'Helldivers 2',e:'🪐',gk:1.6,ck:1.5,heavy:true,pp:'cs',th:{sky:['#365314','#a3e635'],far:'#3f3f46',mid:'#27272a',ground:'#52525b',acc:'#facc15',night:true}},
+ {id:'doom',name:'DOOM: The Dark Ages',e:'😈',gk:2.2,ck:2.8,heavy:true,pp:'cs',th:{sky:['#450a0a','#f97316'],far:'#7f1d1d',mid:'#292524',ground:'#44403c',acc:'#ef4444',night:true}},
+ {id:'elden',name:'Elden Ring',e:'💍',gk:1.7,ck:2.2,heavy:true,cap:60,pp:'w3',th:{sky:['#fcd34d','#fef3c7'],far:'#a8a29e',mid:'#57534e',ground:'#78716c',acc:'#fde047'}},
+ {id:'bg3',name:"Baldur's Gate 3",e:'🎲',gk:1.5,ck:1.6,heavy:true,pp:'w3',th:{sky:['#4c1d95','#c4b5fd'],far:'#6d28d9',mid:'#3f3f46',ground:'#44403c',acc:'#a78bfa',night:true}},
+ {id:'hog',name:'Hogwarts Legacy',e:'🪄',gk:1.3,ck:1.8,heavy:true,pp:'w3',th:{sky:['#1e293b','#64748b'],far:'#334155',mid:'#1f2937',ground:'#374151',acc:'#fbbf24',night:true}},
+ {id:'wukong',name:'Black Myth: Wukong',e:'🐒',gk:1.1,ck:1.9,heavy:true,pp:'w3',th:{sky:['#f59e0b','#fef3c7'],far:'#92400e',mid:'#365314',ground:'#4d7c0f',acc:'#fbbf24'}},
+ {id:'kcd2',name:'Kingdom Come: Deliverance II',e:'🏰',gk:1.4,ck:1.8,heavy:true,pp:'w3',th:{sky:['#93c5fd','#f0f9ff'],far:'#4d7c0f',mid:'#365314',ground:'#3f6212',acc:'#e5e7eb'}},
+ {id:'stalker2',name:'S.T.A.L.K.E.R. 2',e:'☢️',gk:1,ck:1.4,heavy:true,pp:'tlou',th:{sky:['#a3a3a3','#d6d3d1'],far:'#57534e',mid:'#44403c',ground:'#4d5a3a',acc:'#facc15'}},
+ {id:'genshin',name:'Genshin Impact',e:'🌸',gk:4,ck:3.5,pp:'w3',th:{sky:['#7dd3fc','#fef9c3'],far:'#86efac',mid:'#22c55e',ground:'#4ade80',acc:'#f472b6'}},
+ {id:'silksong',name:'Hollow Knight: Silksong',e:'🪡',gk:10,ck:8,pp:'w3',th:{sky:['#0f172a','#475569'],far:'#1e293b',mid:'#0f172a',ground:'#1f2937',acc:'#ef4444',night:true}},
+ {id:'terraria',name:'Terraria',e:'🌳',gk:9,ck:6,pp:'mc',th:{sky:['#60a5fa','#dbeafe'],far:'#16a34a',mid:'#78350f',ground:'#65a30d',acc:'#facc15',blocky:true}},
+ {id:'among',name:'Among Us',e:'🧑‍🚀',gk:12,ck:9,pp:'rbx',th:{sky:['#020617','#1e293b'],far:'#334155',mid:'#475569',ground:'#64748b',acc:'#ef4444',night:true}},
+ {id:'rl',name:'Rocket League',e:'⚽',gk:7,ck:5.5,pp:'fh',th:{sky:['#1d4ed8','#93c5fd'],far:'#1e3a8a',mid:'#f97316',ground:'#16a34a',acc:'#38bdf8'}},
+ {id:'ets2',name:'Euro Truck Simulator 2',e:'🚛',gk:3.5,ck:2.6,pp:'fh',th:{sky:['#bfdbfe','#f8fafc'],far:'#86efac',mid:'#4d7c0f',ground:'#52525b',acc:'#f59e0b'}},
+ {id:'sims4',name:'The Sims 4',e:'💎',gk:5,ck:4,pp:'gta',th:{sky:['#a5f3fc','#ecfccb'],far:'#86efac',mid:'#f9a8d4',ground:'#4ade80',acc:'#22c55e'}},
+ {id:'pcsim2',name:'Симулятор ПК 2 🔮',e:'🖥️',gk:3,ck:3,pp:'rbx',fake:1,th:{sky:['#0b0d12','#1e3a8a'],far:'#312e81',mid:'#4ade80',ground:'#1f2937',acc:'#4ade80',night:true}},
+ {id:'kvr',name:'Kvant Racing ∞ 🔮',e:'🌌',gk:.8,ck:1.2,heavy:true,pp:'fh',fake:1,th:{sky:['#2e1065','#f0abfc'],far:'#6d28d9',mid:'#a855f7',ground:'#3b0764',acc:'#22d3ee'}},
 ];
 const RES={'1080p':1,'1440p':1.45,'4K':2.4,'8K':4.2};
 const QUAL={low:['Низкие',.5],med:['Средние',.75],high:['Высокие',1],ultra:['Ультра',1.25]};
 
 // ===================== СОСТОЯНИЕ =====================
 let KEY='pcbuilder2d_v1';
-function fresh(){return {money:1500,inv:[],inst:{},uid:1,on:false,hist:[],up:{work:0,disc:0,trade:0,yt:0,ads:0,eye:0},mods:{},orders:[],market:[],mT:0,sold:0,earned:0,my:[],lid:1,desk:{},adst:{},mseed:0,mseedT:0,room:{},hist2:[],farm:{racks:[[null,null,null,null,null,null]],mode:'usd',on:false,t:0},btc:0,nft:[],nftTab:'mine',pid:'',avatar:'',set:{},gifts:[],giftUsed:[],btcTotal:0,cust:{},daily:{},wheel:'',ev:null,mining:false,stream:false,mute:false,best:0,ach:{},psplus:false,deco:[],lib:['cs2','val','fn','rbx'],bios:{xmp:false,rebar:false,cpu:'normal',fan:'normal',fast:false,rgb:true,boot:'disk'}}}
+function fresh(){return {money:1500,inv:[],inst:{},uid:1,on:false,hist:[],up:{work:0,disc:0,trade:0,yt:0,ads:0,eye:0},mods:{},orders:[],market:[],mT:0,sold:0,earned:0,my:[],lid:1,desk:{},adst:{},mseed:0,mseedT:0,room:{},hist2:[],farm:{racks:[[null,null,null,null,null,null]],mode:'usd',on:false,t:0},btc:0,nft:[],nftTab:'mine',pid:'',avatar:'',set:{},gifts:[],giftUsed:[],resetAt:0,btcTotal:0,cust:{},daily:{},wheel:'',ev:null,mining:false,stream:false,mute:false,best:0,ach:{},psplus:false,deco:[],lib:['cs2','val','fn','rbx'],bios:{xmp:false,rebar:false,cpu:'normal',fan:'normal',fast:false,rgb:true,boot:'disk'}}}
 let S;
 try{S=JSON.parse(localStorage.getItem(KEY))||fresh()}catch(e){S=fresh()}
 if(!S.inst)S=fresh();
@@ -778,6 +989,7 @@ function save(){if(!window.LOGGED)return;try{localStorage.setItem(KEY,JSON.strin
 
 const $=s=>document.querySelector(s);
 const fmt=n=>'$'+Math.round(n).toLocaleString('ru-RU');
+const ffps=n=>!isFinite(n)||n>=1e15?'∞':Math.round(n).toLocaleString('ru-RU');
 const itm=o=>BY[o.id];
 function eff(o){const it=BY[o.id];if(!o.oc)return it;return {...it,score:it.score*(1+.07*o.oc),tdp:Math.round(it.tdp*(1+.15*o.oc))}}
 const got=z=>S.inst[z]?eff(S.inst[z]):null;
@@ -794,7 +1006,7 @@ function fan(cx,cy,r,col){
 }
 let gidN=0;
 function shine(x,y,w,h,rx=4,op=.16){const id='sh'+(++gidN);return `<defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="${op}"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".18"/></linearGradient></defs><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${rx}" fill="url(#${id})" pointer-events="none"/>`}
-function dims(it){if(it.cat==='deco')return [60,60];if(it.cat==='asic')return [120,60];if(it.cat==='os')return [80,40];if(it.cat==='mon')return [160,120];if(it.cat==='tv')return [160,110];if(it.cat==='console')return it.ckey==='ps4'?[130,44]:[70,110];if(it.cat==='per')return it.stick?[90,110]:{kb:[160,56],mouse:[60,90],pad:[140,90],head:[100,100]}[it.slot];return {case:[340,420],mobo:[230,280],cpu:[56,56],cooler:[80,80],ram:[36,120],gpu:[215,44],psu:[130,70]}[it.cat]||(it.kind==='nvme'?[100,20]:[62,90])}
+function dims(it){if(it.cat==='deco'||it.cat==='fan')return [60,60];if(it.cat==='asic')return [120,60];if(it.cat==='os')return [80,40];if(it.cat==='mon')return [160,120];if(it.cat==='tv')return [160,110];if(it.cat==='console')return it.ckey==='ps4'?[130,44]:[70,110];if(it.cat==='per')return it.stick?[90,110]:{kb:[160,56],mouse:[60,90],pad:[140,90],head:[100,100]}[it.slot];return {case:[340,420],mobo:[230,280],cpu:[56,56],cooler:[80,80],ram:[36,120],gpu:[215,44],psu:[130,70]}[it.cat]||(it.kind==='nvme'?[100,20]:[62,90])}
 function art(it){
   const [W,H]=dims(it);let s='';
   if(typeof ART2!=='undefined'&&ART2[it.cat])return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">${ART2[it.cat](it)}</svg>`;
@@ -908,12 +1120,13 @@ function art(it){
   return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">${s}</svg>`;
 }
 function airOf(c){return !c?1:c.air||[.9,.95,1,1.05][Math.min(3,c.fans||0)]}
-function spec(it){let t=spec0(it);if(it.lbl)t=`на коробке ${it.lbl} 🤔 · ${it.tier}`;if(it.fake)t+=' · 🎭 выдуманная';if(it.cat==='mobo'&&it.ram2)t+=' · 2 комплекта ОЗУ';if(it.bps)t+=' · ⛏️ майнит 1 ₿ каждую секунду (в ферме или в ПК)';return t}
+function spec(it){let t=spec0(it);if(it.lbl)t=`на коробке ${it.lbl} 🤔 · ${it.tier}`;if(it.fake)t+=' · 🎭 выдуманная';if(it.cat==='mobo'&&it.ram2)t+=' · 2 комплекта ОЗУ';if(it.twin)t+=' · 🧠🧠 2 процессора, 2 кулера, 2 БП';if(it.bps)t+=` · ⛏️ майнит ${it.bps} ₿ каждую секунду (в ферме или в ПК)`;return t}
 function spec0(it){
   switch(it.cat){
     case 'case':{const a=Math.round((airOf(it)-1)*100);return `${it.fans?it.fans+' вент.':'без вентиляторов'}${it.rgb?' · RGB 🌈':''} · обдув ${a>=0?'+':''}${a}%`}
     case 'mobo':return `Сокет ${it.socket} · ${it.ram}${it.dual?' · 2× M.2 · 2× PCIe для двух видеокарт':''}${it.bonus?` · разгон +${Math.round((it.bonus-1)*100)}%`:''}`;
     case 'cpu':return `${it.socket} · ${it.cores} ядер · ${it.tdp}W`;
+    case 'fan':return `Боковой вентилятор · обдув +${Math.round(it.air*100)}%${it.rgb?' · RGB 🌈':''}`;
     case 'cooler':return `Охлаждает до ${it.max}W`;
     case 'ram':return `${it.size}GB ${it.type}-${it.speed}${it.rgb?' · RGB':''}`;
     case 'gpu':return `${it.vram}GB видеопамяти · ${it.tdp}W${it.proto?' · 🔮 прототип из будущего: в реальности ещё не вышла, характеристики выдуманы':''}`;
@@ -974,12 +1187,12 @@ $('#work').onclick=()=>{
 const bench=$('#bench'),bwrap=$('#bwrap');
 function fit(){const w=bwrap.clientWidth;if(!w)return;const s=w/340;bench.style.setProperty('--sc',`scale(${s})`);bench.style.transform=`scale(${s})`;bwrap.style.height=420*s+'px'}
 new ResizeObserver(fit).observe(bwrap);
-function depsOk(z){const n=ZONES[z].need;if(ZONES[z].ram2&&!(S.inst.mobo&&BY[S.inst.mobo.id].ram2))return false;if(ZONES[z].dual&&!(S.inst.mobo&&BY[S.inst.mobo.id].dual))return false;return !n||!!S.inst[n]}
+function depsOk(z){const n=ZONES[z].need;if(ZONES[z].ram2&&!(S.inst.mobo&&BY[S.inst.mobo.id].ram2))return false;if(ZONES[z].dual&&!(S.inst.mobo&&BY[S.inst.mobo.id].dual))return false;if(ZONES[z].twin&&!(S.inst.mobo&&BY[S.inst.mobo.id].twin))return false;return !n||!!S.inst[n]}
 function accepts(z,it){const Z=ZONES[z];if(Z.acc!==it.cat)return false;if(Z.kind&&it.kind!==Z.kind)return false;if(z==='bay'&&it.kind==='nvme')return false;return true}
 function compatErr(z,it){
   if(!depsOk(z))return `Сначала поставь: ${ZONES[ZONES[z].need].label.toLowerCase()}`;
   const mb=got('mobo');
-  if(z==='cpu'&&mb.socket!==it.socket)return `❌ Сокет не тот: процессор ${it.socket}, а материнка ${mb.socket}`;
+  if((z==='cpu'||z==='cpu2')&&mb.socket!==it.socket)return `❌ Сокет не тот: процессор ${it.socket}, а материнка ${mb.socket}`;
   if((z==='ram'||z==='ram2')&&mb.ram!==it.type)return `❌ ${it.type} не влезет — материнка под ${mb.ram}`;
   if(z==='mobo'&&got('cpu')&&got('cpu').socket!==it.socket)return '';
   return '';
@@ -999,15 +1212,16 @@ function autoZone(it){
   return c.find(z=>depsOk(z)&&!S.inst[z])||c.find(z=>depsOk(z))||c[0];
 }
 const NEEDS=[['case','корпус'],['mobo','материнку'],['cpu','процессор'],['cooler','кулер на процессор'],['ram','оперативку'],['gpu','видеокарту'],['store','накопитель (M.2 или SATA)'],['psu','блок питания']];
-function missing(){return NEEDS.filter(([z])=>z==='store'?!(S.inst.m2||S.inst.m2b||S.inst.bay):!S.inst[z])}
-function powerDraw(){const c=got('cpu'),g=got('gpu'),g2=got('gpu2');return (c?Math.round(c.tdp*(CPUM[S.bios.cpu]||CPUM.normal)[2]):0)+(g?g.tdp:0)+(g2?g2.tdp:0)+80}
+function missing(){const m=NEEDS.filter(([z])=>z==='store'?!(S.inst.m2||S.inst.m2b||S.inst.bay):!S.inst[z]);if(S.inst.cpu2&&!S.inst.cooler2)m.push(['cooler2','кулер на второй процессор']);return m}
+function powerDraw(){const c=got('cpu'),c2=got('cpu2'),g=got('gpu'),g2=got('gpu2'),cm=(CPUM[S.bios.cpu]||CPUM.normal)[2];return (c?Math.round(c.tdp*cm):0)+(c2?Math.round(c2.tdp*cm):0)+(g?g.tdp:0)+(g2?g2.tdp:0)+80}
 function multiGpu(){const g=got('gpu'),g2=got('gpu2');if(!g||!g2)return null;return {same:S.inst.gpu.id===S.inst.gpu2.id,g,g2}}
 function renderBuild(){
+  zlayout();
   // шаг-подсказка
   const miss=missing();const st=$('#step');
   if(S.on){st.className='step ok';st.textContent='🟢 ПК работает! Иди во вкладку «🖥️ Монитор» и запускай игры'}
   else if(!miss.length){st.className='step ok';st.textContent='Всё собрано! Жми кнопку питания ⏻'}
-  else{st.className='step';const n=NEEDS.length-miss.length+1;st.textContent=`Шаг ${n}/8: поставь ${miss[0][1]}${hasCat(miss[0][0])?'':' — сначала купи в магазине'}`}
+  else{st.className='step';const n=NEEDS.length-miss.length+1;st.textContent=`Шаг ${Math.min(n,8)}/8: поставь ${miss[0][1]}${hasCat(miss[0][0])?'':' — сначала купи в магазине'}`}
   // стенд
   let h='';
   if(S.inst.case)h+=`<div class="z" style="left:0;top:0;width:340px;height:420px">${art(custLook('case',got('case')))}</div>`;
@@ -1016,7 +1230,7 @@ function renderBuild(){
     if(!depsOk(z))continue;const [x,y,w,hh]=ZONES[z].box;const o=S.inst[z];
     const style=`left:${x}px;top:${y}px;width:${w}px;height:${hh}px`;
     if(o)h+=`<div class="z filled ${justPlaced===z?'pop':''}" data-zone="${z}" style="${style}">${art(custLook(z,itm(o)))}</div>`;
-    else h+=`<div class="z slot" data-zone="${z}" style="${style}">${z==='cooler'?'':ZONES[z].label}</div>`;
+    else h+=`<div class="z slot" data-zone="${z}" style="${style}">${z==='cooler'||z==='cooler2'?'':ZONES[z].label}</div>`;
   }
   h+=cableHTML()+decoHTML();
   if(S.inst.case&&S.mods.rgb)h+=`<div class="z" style="left:16px;top:14px;width:308px;height:5px;pointer-events:none"><svg viewBox="0 0 308 5" preserveAspectRatio="none"><rect width="308" height="5" rx="2" class="rgbf"/></svg></div>`;
@@ -1024,20 +1238,22 @@ function renderBuild(){
   bench.innerHTML=h;bench.classList.toggle('on',S.on);bench.classList.toggle('norgb',!S.bios.rgb);bench.classList.toggle('rgbst',!!S.cust.rgb&&S.bios.rgb);bench.style.setProperty('--rgbc',S.cust.rgb||'#fff');bwrap.style.filter=S.cust.neon?`drop-shadow(0 10px 14px ${S.cust.neon})`:'';
   fit();
   // статистика
-  const psu=got('psu'),need=powerDraw();
+  const psu=got('psu'),need=powerDraw(),cap=psuCap();
   const price=Object.values(S.inst).reduce((a,o)=>a+itm(o).price,0);
   $('#mods').innerHTML=MODS.map(m=>`<button class="${S.mods[m.k]?'got':''}" data-mod="${m.k}"><b>${m.e}</b>${m.n}<br>${S.mods[m.k]?'✓ есть':fmt(m.p)}</button>`).join('');
   const c=got('cpu'),k=got('cooler');
   let warn='';
-  const kmax=k?Math.round((k.max+(S.mods.paste?15:0))*(FANM[S.bios.fan]||FANM.normal)[1]*airOf(got('case'))*(S.cust.fans?1.05:1)):0,ctdp=c?Math.round(c.tdp*(CPUM[S.bios.cpu]||CPUM.normal)[2]):0;
+  const kmax=k?Math.round((k.max+(S.mods.paste?15:0))*(FANM[S.bios.fan]||FANM.normal)[1]*caseAir()*(S.cust.fans?1.05:1)):0,ctdp=c?Math.round(c.tdp*(CPUM[S.bios.cpu]||CPUM.normal)[2]):0;
   if(c&&k&&ctdp>kmax)warn+=`<div class="warn">🔥 Кулер слабый: ${ctdp}W > ${kmax}W — будет троттлинг</div>`;
-  if(psu&&need>psu.w)warn+=`<div class="bad">⚡ БП не тянет: нужно ~${need}W</div>`;
+  if(psu&&need>cap)warn+=`<div class="bad">⚡ БП не тянет: нужно ~${need}W</div>`;
+  if(S.inst.cpu2){const a=got('cpu'),b2=got('cpu2');warn+=a&&b2&&S.inst.cpu.id===S.inst.cpu2.id?`<div class="good">🧠🧠 Два одинаковых ${a.short||a.name}: +60% к процессору</div>`:`<div class="warn">⚠️ Процессоры разные — работают вместе только на +15%</div>`}
+  {const sf=sideFans();if(sf.length)warn+=`<div class="good">🌀 Боковые вентиляторы: ${sf.length} шт., обдув +${Math.round(sf.reduce((a,f)=>a+f.air,0)*100)}%</div>`}
   if(S.inst.ram&&S.inst.ram2){const a=got('ram'),b2=got('ram2'),same=S.inst.ram.id===S.inst.ram2.id;
     warn+=same?`<div class="good">🧠🧠 Два одинаковых комплекта: ${a.size+b2.size}GB, +3% к скорости</div>`:`<div class="warn">⚠️ Разные комплекты ОЗУ: ${a.size+b2.size}GB, но работают на скорости самого медленного</div>`}
   const mg=multiGpu();
   if(mg)warn+=mg.same?`<div class="good">🎴🎴 Две одинаковые ${mg.g.short} работают в паре: +50% к графике</div>`:`<div class="warn">⚠️ Видеокарты разные (${mg.g.short} + ${mg.g2.short}) — в паре не работают, вторая простаивает</div>`;
   if(!miss.length&&!S.bios.xmp)warn+=`<div class="warn">💡 XMP выключен — зайди в BIOS и включи (+FPS)</div>`;
-  $('#stats').innerHTML=`Потребление: <b>~${need}W</b> / БП: <b class="${psu?(need>psu.w?'bad':'good'):''}">${psu?psu.w+'W':'—'}</b><br>Стоимость сборки: <b>${fmt(price)}</b>${!miss.length?`<br>Оценка: <b>${score()} очков</b>`:''}${warn}`;
+  $('#stats').innerHTML=`Потребление: <b>~${need}W</b> / БП: <b class="${psu?(need>cap?'bad':'good'):''}">${psu?cap+'W'+(got('psu2')?' (2 БП)':''):'—'}</b><br>Стоимость сборки: <b>${fmt(price)}</b>${!miss.length?`<br>Оценка: <b>${score()} очков</b>`:''}${warn}`;
   const p=$('#pwr');p.classList.toggle('on',S.on);
   // склад
   const inv=$('#inv');
@@ -1128,15 +1344,19 @@ function rig(B=S.bios){
   const c0=got('cpu'),g0=got('gpu'),mobo=got('mobo'),cool=got('cooler');let ram=got('ram');const r2=got('ram2');
   if(r2){const same=S.inst.ram.id===S.inst.ram2.id;ram={...ram,size:ram.size+r2.size,speed:Math.min(ram.speed,r2.speed),mult:same?ram.mult+.03:Math.min(ram.mult,r2.mult)-.02,name:same?'2× '+ram.name:ram.name+' + '+r2.name,kits:2,same}}
   const cm=CPUM[B.cpu]||CPUM.normal;
-  const cpu={...c0,score:c0.score*cm[1],tdp:Math.round(c0.tdp*cm[2])};
+  let cpu={...c0,score:c0.score*cm[1],tdp:Math.round(c0.tdp*cm[2])};const c2=got('cpu2'),k2=got('cooler2');
+  const tdp1=cpu.tdp;let tdp2=0;
+  if(c2){tdp2=Math.round(c2.tdp*cm[2]);const same=S.inst.cpu.id===S.inst.cpu2.id,best=c2.score>c0.score?c2:c0;
+    cpu=same?{...cpu,name:'2× '+c0.name,short:'2× '+(c0.short||c0.name),score:cpu.score*1.6,cores:c0.cores*2,tdp:tdp1+tdp2,twin:true}:{...best,name:c0.short+' + '+c2.short,score:best.score*cm[1]*1.15,cores:c0.cores+c2.cores,tdp:tdp1+tdp2,twin:true}}
   let gpu={...g0,score:g0.score*(B.rebar?1.04:1)*(S.cust.wb?1.06:1)};const g2=got('gpu2');
   if(g2){if(S.inst.gpu.id===S.inst.gpu2.id)gpu={...gpu,name:'2× '+g0.short,short:'2× '+g0.short,score:gpu.score*1.5,tdp:g0.tdp+g2.tdp,dual:true};
     else{const best=g2.score>g0.score?g2:g0;gpu={...best,score:best.score*(B.rebar?1.04:1),name:best.name+' (вторая простаивает)',tdp:g0.tdp+g2.tdp,mixed:true}}}
   const rmult=B.xmp?ram.mult:1+(ram.mult-1)*.3-.04;
-  const cmax=Math.round((cool.max+(S.mods.paste?15:0))*(FANM[B.fan]||FANM.normal)[1]*airOf(got('case'))*(S.cust.fans?1.05:1));const hot=cpu.tdp>cmax;
+  const cmax=Math.round((cool.max+(S.mods.paste?15:0))*(FANM[B.fan]||FANM.normal)[1]*caseAir()*(S.cust.fans?1.05:1));const cmax2=c2?(k2?Math.round((k2.max+(S.mods.paste?15:0))*(FANM[B.fan]||FANM.normal)[1]*caseAir()*(S.cust.fans?1.05:1)):0):0;
+  const hot=c2?(tdp1>cmax||tdp2>cmax2):cpu.tdp>cmax;
   const cpuEff=cpu.score*rmult*(mobo.bonus||1)*(hot?.72:1);
   const st=[got('m2'),got('m2b'),got('bay')].filter(Boolean);
-  return {cpu,gpu,ram,mobo,cool,hot,cmax,cpuEff,draw:cpu.tdp+gpu.tdp+80,load:+(Math.min(...st.map(s=>s.load))*(B.fast?.8:1)).toFixed(2),temp:Math.min(100,Math.round(36+50*cpu.tdp/cmax))};
+  return {cpu,gpu,ram,mobo,cool,hot,cmax:cmax+cmax2,cpuEff,draw:cpu.tdp+gpu.tdp+80,load:+(Math.min(...st.map(s=>s.load))*(B.fast?.8:1)).toFixed(2),temp:Math.min(100,Math.round(36+50*cpu.tdp/cmax))};
 }
 function calc(r,g,res,q){
   let gf=r.gpu.score*g.gk/RES[res]/QUAL[q][1];
@@ -1144,7 +1364,7 @@ function calc(r,g,res,q){
   if(r.gpu.vram<=8&&res==='4K'&&g.heavy)gf*=.8;
   let cf=r.cpuEff*g.ck*(q==='low'?1.1:1);
   if(r.ram.size<16&&g.heavy)cf*=.75;
-  let fps=Math.max(1,Math.min(gf,cf));if(g.cap)fps=Math.min(fps,g.cap);fps=Math.min(fps,10000);
+  let fps=Math.max(1,Math.min(gf,cf));if(g.cap)fps=Math.min(fps,g.cap);
   return {fps,gf,cf,bottle:gf<cf?'gpu':'cpu'};
 }
 function drawScene(th,t){const tt=t;if(th.still)t*=.12;
@@ -1297,7 +1517,7 @@ function renderSell(){
   const r=S.on?rig():null;
   $('#orders').innerHTML=S.orders.map((o,i)=>{
     const g=GAMES.find(x=>x.id===o.g);let st='';
-    if(r){const f=Math.round(calc(r,g,o.res,o.q).fps);const ok=f>=o.fps;st=`<span class="${ok?'good':'bad'}" style="font-size:13px;font-weight:700">Твой ПК: ~${f} FPS ${ok?'✅':'❌'}</span>`;o._ok=ok}else{st='<span class="mut">Собери и включи ПК</span>';o._ok=false}
+    if(r){const f=Math.round(calc(r,g,o.res,o.q).fps);const ok=f>=o.fps;st=`<span class="${ok?'good':'bad'}" style="font-size:13px;font-weight:700">Твой ПК: ~${ffps(f)} FPS ${ok?'✅':'❌'}</span>`;o._ok=ok}else{st='<span class="mut">Собери и включи ПК</span>';o._ok=false}
     return `<div class="ord"><div class="row"><span class="who">${o.who}</span><b class="good">${fmt(o.reward*(1+.1*lvl('ads')))}</b></div>
     <div class="req">Хочу ПК для <b>${g.e} ${g.name}</b>: <b>${o.fps}+ FPS</b> в ${o.res} на ${QUAL[o.q][0].toLowerCase()} настройках</div>
     <div class="row">${st}<span><button class="btn sm" data-skip="${i}">✖</button> <button class="btn g sm" data-deliver="${i}" ${o._ok?'':'disabled'}>Сдать ПК</button></span></div></div>`;
@@ -1315,13 +1535,14 @@ function sellBuild(pay,msg){
 }
 // заказы: награда считается от самой дешёвой сборки, которая тянет требование
 const CL=['🧒 Школьник Дима','🎥 Стример Лиза','👨‍💼 Офисный Олег','🎮 Киберспортсмен Макс','👵 Бабушка Валя (внуку)','🧑‍🎓 Студент Артём','🕹️ Геймерша Настя','🤠 Ковбой Джон','🧙 Маг Саша'];
+const OFC={};const ofCat=c=>OFC[c]||(OFC[c]=CATALOG.filter(i=>i.cat===c));
 function cheapest(g,res,q,target){
-  const of=c=>CATALOG.filter(i=>i.cat===c);let best=Infinity;
+  const of=ofCat;let best=Infinity;const MBC={},CLC={},PSC={};
   const caseP=Math.min(...of('case').map(i=>i.price)),stP=Math.min(...of('storage').map(i=>i.price));
   for(const cpu of of('cpu'))for(const gpu of of('gpu'))for(const ram of of('ram')){
-    const mb=of('mobo').filter(m=>m.socket===cpu.socket&&m.ram===ram.type).sort((a,b)=>a.price-b.price)[0];if(!mb)continue;
-    const cool=of('cooler').filter(k=>k.max>=cpu.tdp).sort((a,b)=>a.price-b.price)[0];if(!cool)continue;
-    const psu=of('psu').filter(p=>p.w>=cpu.tdp+gpu.tdp+80).sort((a,b)=>a.price-b.price)[0];if(!psu)continue;
+    const mk=cpu.socket+'|'+ram.type,mb=mk in MBC?MBC[mk]:(MBC[mk]=of('mobo').filter(m=>m.socket===cpu.socket&&m.ram===ram.type).sort((a,b)=>a.price-b.price)[0]);if(!mb)continue;
+    const cool=cpu.tdp in CLC?CLC[cpu.tdp]:(CLC[cpu.tdp]=of('cooler').filter(k=>k.max>=cpu.tdp).sort((a,b)=>a.price-b.price)[0]);if(!cool)continue;
+    const pw=cpu.tdp+gpu.tdp+80,psu=pw in PSC?PSC[pw]:(PSC[pw]=of('psu').filter(p=>p.w>=pw).sort((a,b)=>a.price-b.price)[0]);if(!psu)continue;
     const fps=calc({cpu,gpu,ram,cpuEff:cpu.score*ram.mult*(mb.bonus||1)},g,res,q).fps;
     if(fps>=target)best=Math.min(best,cpu.price+gpu.price+ram.price+mb.price+cool.price+psu.price+caseP+stP);
   }
@@ -1364,7 +1585,7 @@ setInterval(()=>{const l=lvl('yt');if(!l)return;S.money+=5*l;S.earned+=5*l;
   if(drag||T.running||tab==='build')renderMoney();else render();save()},10000);
 
 // ===================== СЦЕНЫ ИГР: ДЕКОР =====================
-GAMES.forEach(g=>g.th.props={cs2:'cs',val:'val',fn:'fn',mc:'mc',rbx:'rbx',gta:'gta',rdr:'rdr',cp:'cp',gta6:'gta6',fh6:'fh',w3:'w3',rust:'rust',tlou:'tlou',mk11:'mk'}[g.id]);
+GAMES.forEach(g=>g.th.props={cs2:'cs',val:'val',fn:'fn',mc:'mc',rbx:'rbx',gta:'gta',rdr:'rdr',cp:'cp',gta6:'gta6',fh6:'fh',w3:'w3',rust:'rust',tlou:'tlou',mk11:'mk'}[g.id]||g.pp);
 const W_=(v,span)=>((v%span)+span)%span;
 function cloud(x,y,s,blocky){ctx.fillStyle='rgba(255,255,255,.85)';if(blocky){ctx.fillRect(x,y,30*s,8*s);ctx.fillRect(x+6*s,y-6*s,16*s,6*s)}else{ctx.beginPath();ctx.ellipse(x,y,16*s,7*s,0,0,7);ctx.ellipse(x+12*s,y-4*s,11*s,8*s,0,0,7);ctx.ellipse(x+22*s,y,13*s,6*s,0,0,7);ctx.fill()}}
 function drawProps(th,t,layer){
@@ -1411,7 +1632,7 @@ const AD_N=10000;
 function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 if(!S.mseed){S.mseed=1+Math.floor(Math.random()*1e6);S.mseedT=Date.now()}
 function randomPC(R){
-  const pk=a=>a[Math.floor(R()*a.length)],of=c=>CATALOG.filter(i=>i.cat===c);
+  const pk=a=>a[Math.floor(R()*a.length)],of=c=>ofCat(c).filter(i=>!i.bps&&i.price<=50000);
   const cpu=pk(of('cpu')),mb=pk(of('mobo').filter(m=>m.socket===cpu.socket)),ram=pk(of('ram').filter(r=>r.type===mb.ram)),gpu=pk(of('gpu'));
   const cool=pk(of('cooler').filter(k=>k.max>=cpu.tdp));
   const psu=of('psu').filter(p=>p.w>=cpu.tdp+gpu.tdp+80).sort((a,b)=>a.price-b.price)[0];
@@ -1666,7 +1887,7 @@ function renderMon(){updStreamBtn();
   $('#periph').innerHTML=['kb','mouse','pad','head'].map(s=>{const o=S.desk[s];
     return `<div class="pslot ${o?'on':''}" data-ps="${s}">${o?`<div class="ic">${art(itm(o))}</div><small>${itm(o).name.replace(/^(Клавиатура|Мышь|Геймпад|Джойстик|Наушники) /,'')}</small>`:`<div class="pe">${SLOTE[s]}</div><small>+ ${SLOTN[s].split(' ')[0]}</small>`}</div>`}).join('');
   $('#perInfo').innerHTML=`🎧 Бонус периферии к гонорару: <b class="good">+${Math.round(perBonus()*100)}%</b>`;
-  $('#hist').innerHTML=S.hist.length?S.hist.map(h=>`<div><span>${h.e} ${h.g} · ${h.res} · ${h.q}</span><b class="${h.avg>=60?'good':h.avg>=30?'warn':'bad'}">${h.avg} FPS</b></div>`).join(''):'<div class="mut" style="background:none">Пока пусто — запусти игру с рабочего стола</div>';
+  $('#hist').innerHTML=S.hist.length?S.hist.map(h=>`<div><span>${h.e} ${h.g} · ${h.res} · ${h.q}</span><b class="${h.avg>=60?'good':h.avg>=30?'warn':'bad'}">${ffps(h.avg)} FPS</b></div>`).join(''):'<div class="mut" style="background:none">Пока пусто — запусти игру с рабочего стола</div>';
   if(!T.running)drawOS();
 }
 $('#monLbl').onclick=e=>{if(e.target.closest('#monOff'))disconnect('mon')};
@@ -1744,7 +1965,7 @@ function launch(){
   if(T.running||!S.on||!dk('mon'))return;
   const g=GAMES.find(x=>x.id===T.game),r=rig(),base=calc(r,g,T.res,T.q),m=dk('mon');
   const ob=osBlock(g.id);if(ob){T.win={t:'info',title:g.e+' '+g.name,html:'<div class="wtxt">🔒 '+ob+'</div>'};return drawOS()}
-  base.fps=Math.min(10000,base.fps*(OSD[curOS()].mult||1));
+  base.fps=base.fps*(OSD[curOS()].mult||1);
   const ocAny=Object.values(S.inst).some(o=>(o.oc||0)>=2)||((Object.values(S.inst).some(o=>(o.oc||0)>=1)||S.bios.cpu==='turbo')&&r.hot);
   if(ocAny&&Math.random()<.45)return bsod();
   T.running=true;T.win=null;T.samples=[];T.ctx=null;T.chat=[];T.don=0;T.viewers=0;T.nextMsg=0;
@@ -1759,10 +1980,10 @@ function play(r,g,base,m){
   const tick=now=>{
     if(!T.running)return;
     const el=now-start;
-    if(now-lastS>250){lastS=now;cur=base.fps*(.9+Math.random()*.18)*(Math.random()<.07?.62:1);if(g.cap)cur=Math.min(cur,g.cap);cur=Math.min(cur,10000);T.samples.push(cur);streamTick(now,cur);
+    if(now-lastS>250){lastS=now;cur=base.fps*(.9+Math.random()*.18)*(Math.random()<.07?.62:1);if(g.cap)cur=Math.min(cur,g.cap);T.samples.push(cur);streamTick(now,cur);
       const gu=base.bottle==='gpu'?97+Math.random()*2:Math.min(99,base.fps/base.gf*100*(.95+Math.random()*.05));
       const cu=base.bottle==='cpu'?88+Math.random()*10:Math.min(95,base.fps/base.cf*100*.8+Math.random()*5);
-      $('#hud').innerHTML=`<span class="f">${Math.round(cur)} FPS</span>\nCPU ${Math.round(cu)}%  ${r.temp+Math.round(Math.random()*3)}°C\nGPU ${Math.round(gu)}%  ${Math.round(55+gu*.2+Math.random()*2)}°C\n${T.res} · ${QUAL[T.q][0]} · ${m.hz}Hz${T.samples.length<16?'\n⏳ замер…':''}`;
+      $('#hud').innerHTML=`<span class="f">${ffps(cur)} FPS</span>\nCPU ${Math.round(cu)}%  ${r.temp+Math.round(Math.random()*3)}°C\nGPU ${Math.round(gu)}%  ${Math.round(55+gu*.2+Math.random()*2)}°C\n${T.res} · ${QUAL[T.q][0]} · ${m.hz}Hz${T.samples.length<16?'\n⏳ замер…':''}`;
     }
     if(now-last>=1000/Math.min(cur,m.hz,240)-2){last=now;drawScene(g.th,el)}
     requestAnimationFrame(tick);
@@ -1785,8 +2006,8 @@ function exitGame(){
   if(c.r.ram.size<16&&c.g.heavy)tips.push('💾 8GB мало — бери 16GB+');
   if(!S.desk.mouse&&!S.desk.pad)tips.push('🖱️ Без мыши и геймпада играть неудобно — подключи');
   if(S.stream)tips.push(`🔴 Стрим: 👁 ${T.viewers} зрителей, донаты ${fmt(T.don)}`);
-  T.win={t:'res',g:c.g.name,html:`<div class="wtxt"><b class="${v[2]}" style="font-size:20px">${avg} FPS</b> ${v[0]} <b class="${v[2]}">${v[1]}</b><br>Мин: <b>${low}</b> · Гонорар за обзор: <b class="good">+${fmt(reward)}</b><br><span class="mut">${tips.join('<br>')}</span></div>`};
-  toast(`🏁 ${avg} FPS · +${fmt(reward)} за обзор 📹`,'ok');
+  T.win={t:'res',g:c.g.name,html:`<div class="wtxt"><b class="${v[2]}" style="font-size:20px">${ffps(avg)} FPS</b> ${v[0]} <b class="${v[2]}">${v[1]}</b><br>Мин: <b>${ffps(low)}</b> · Гонорар за обзор: <b class="good">+${fmt(reward)}</b><br><span class="mut">${tips.join('<br>')}</span></div>`};
+  toast(`🏁 ${ffps(avg)} FPS · +${fmt(reward)} за обзор 📹`,'ok');
   render();
 }
 
@@ -1802,9 +2023,9 @@ function preflight(){
   const bad=Object.values(S.inst).find(o=>o.broken);
   if(bad){bad.rev=true;bench.classList.add('on','boom');
     setTimeout(()=>{bench.classList.remove('on','boom');toast(`💀 Б/У ${itm(bad).name} оказалась битой! Сними и продай на запчасти`,'bad');render()},450);return false}
-  const psu=got('psu'),need=powerDraw();
-  if(need>psu.w){bench.classList.add('on','boom');
-    setTimeout(()=>{bench.classList.remove('on','boom');toast(`💥 Щёлк! БП на ${psu.w}W не тянет — нужно ~${need}W`,'bad')},450);return false}
+  const psu=got('psu'),need=powerDraw(),cap=psuCap();
+  if(need>cap){bench.classList.add('on','boom');
+    setTimeout(()=>{bench.classList.remove('on','boom');toast(`💥 Щёлк! БП на ${cap}W не тянет — нужно ~${need}W`,'bad')},450);return false}
   return true;
 }
 function openBios(after){B2={...S.bios};BT='main';biosAfter=after;$('#bios').classList.add('show');renderBios()}
@@ -1926,7 +2147,7 @@ function renderRoom(){
   $('#padSlot').innerHTML=p?art(p):'🎮 + Геймпад';
   $('#roomInfo').innerHTML=c?`🎮 ${c.name}: нужен геймпад <b>${CON[c.ckey].padN}</b>${p?(padOK()?' ✅':` ❌ (у тебя ${p.name.replace('Геймпад ','')})`):''}${tv?` · 📺 ${tv.res} ${tv.hz}Hz`:''}${p&&p.bonus?` · бонус к гонорару +${Math.round(p.bonus*100)}%`:''}<br>🌪️ Пыль: <b class="${(S.room.con.dust||0)>=60?'bad':(S.room.con.dust||0)>=30?'warn':'good'}">${Math.round(S.room.con.dust||0)}%</b>${(S.room.con.dust||0)>=60?' — приставка гудит и тормозит, почисти!':''}${S.psplus?' · ➕ PS Plus +25%':''}`:'Поставь телевизор, приставку и геймпад — и играй с дивана 🛋️';
   renderPsShop();
-  $('#hist2').innerHTML=S.hist2.length?S.hist2.map(h=>`<div><span>${h.e} ${h.g} · ${h.c} · ${h.m}</span><b class="${h.avg>=60?'good':h.avg>=30?'warn':'bad'}">${h.avg} FPS</b></div>`).join(''):'<div class="mut" style="background:none">Пока пусто</div>';
+  $('#hist2').innerHTML=S.hist2.length?S.hist2.map(h=>`<div><span>${h.e} ${h.g} · ${h.c} · ${h.m}</span><b class="${h.avg>=60?'good':h.avg>=30?'warn':'bad'}">${ffps(h.avg)} FPS</b></div>`).join(''):'<div class="mut" style="background:none">Пока пусто</div>';
 }
 function drawCon(){
   const v=$('#conView');if(!v)return;
@@ -1967,8 +2188,8 @@ function conLaunch(){
     if(!R.running)return;
     if(now<start){$('#hud2').innerHTML=`<span class="f">⏳ Загрузка ${Math.round((now-t0)/ld*100)}%</span>`;return requestAnimationFrame(tick)}
     const el=now-start;
-    if(now-lastS>250){lastS=now;cur=Math.min(tv.hz,10000,fps*(.96+Math.random()*.05)*(Math.random()<.03?.8:1));R.samples.push(cur);
-      $('#hud2').innerHTML=`<span class="f">${Math.round(cur)} FPS</span>\n${C.name} · ${C.res[R.ctx.mode]}\n${['Качество','Производительность'][R.ctx.mode]}${R.samples.length<16?'\n⏳ замер…':''}`}
+    if(now-lastS>250){lastS=now;cur=Math.min(tv.hz,fps*(.96+Math.random()*.05)*(Math.random()<.03?.8:1));R.samples.push(cur);
+      $('#hud2').innerHTML=`<span class="f">${ffps(cur)} FPS</span>\n${C.name} · ${C.res[R.ctx.mode]}\n${['Качество','Производительность'][R.ctx.mode]}${R.samples.length<16?'\n⏳ замер…':''}`}
     if(now-last>=1000/Math.min(cur,tv.hz)-2){last=now;drawOn(cv2,()=>drawScene(g.th,el))}
     requestAnimationFrame(tick);
   };
@@ -2039,7 +2260,7 @@ function decoHTML(){
     return `<div class="deco" data-deco="${i}" style="left:${d.x-sz/2}px;top:${f?d.y-sz:d.y-sz/2}px;width:${sz}px;height:${sz}px;transform:rotate(${rot}deg)">${art(it)}</div>`}).join('');
 }
 // ===================== СТИМ =====================
-const GPRICE={mc:30,gta:30,rdr:60,cp:60,gta6:80,fh6:70,w3:40,rust:40,tlou:60,mk11:50};
+const GPRICE={mc:30,gta:30,rdr:60,cp:60,gta6:80,fh6:70,w3:40,rust:40,tlou:60,mk11:50,bf6:70,hd2:40,doom:70,elden:60,bg3:60,hog:60,wukong:60,kcd2:60,stalker2:60,silksong:20,terraria:10,among:5,ets2:20,pcsim2:15,kvr:99};
 function saleId(){const paid=Object.keys(GPRICE);return paid[new Date().getDate()%paid.length]}
 function gPrice(id){const p=GPRICE[id]||0;return id===saleId()?Math.round(p/2):p}
 function steamHTML(w){
@@ -2128,6 +2349,9 @@ function moboArt(it){
   s+=[[58,104],[66,104],[74,104],[130,44],[130,52],[130,60]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="2.6" fill="#1f2937" stroke="#6b7280" stroke-width=".6"/><circle cx="${x}" cy="${y}" r="1" fill="#9ca3af"/>`).join('');
   for(let k=0;k<(it.ram2?8:4);k++){const x=k<4?151+k*9:189+(k-4)*9,lc=k%2?'#6b7280':'#9ca3af';s+=`<rect x="${x}" y="25" width="5" height="120" rx="1" fill="#07090d" stroke="#555d70" stroke-width=".6"/><rect x="${x-.5}" y="21" width="6" height="4" rx="1" fill="${lc}"/><rect x="${x-.5}" y="145" width="6" height="4" rx="1" fill="${lc}"/>`}
   s+=`<text x="168" y="158" font-size="6" fill="#8a93a8" text-anchor="middle" font-family="sans-serif">${it.ram}</text><rect x="${it.ram2?224:214}" y="60" width="${it.ram2?5:10}" height="56" rx="1" fill="#07090d"/>`;
+  if(it.twin){s+=`<rect x="4" y="16" width="140" height="112" rx="3" fill="${c}"/><rect x="4" y="16" width="140" height="112" fill="url(#${idP})"/><rect x="10" y="20" width="120" height="12" rx="3" fill="url(#${idA})"/>`;
+    for(const ox of [8,72]){s+=`<rect x="${ox}" y="38" width="54" height="54" rx="3" fill="#1d2027" stroke="#6b7280"/><rect x="${ox+3}" y="41" width="48" height="48" rx="2" fill="#2b2f38" stroke="#9aa3b5"/><g fill="#40464f">${Array.from({length:7},(_,i)=>`<rect x="${ox+8+i*6}" y="46" width="1.5" height="38"/>`).join('')}</g><text x="${ox+27}" y="68" font-size="6" fill="#9aa3b5" text-anchor="middle" font-family="sans-serif" font-weight="700">${it.socket}</text>`}
+    s+=`<text x="70" y="112" font-size="7" fill="${shade(a,.6)}" text-anchor="middle" font-weight="900" font-family="sans-serif" letter-spacing="1">${it.short} · TWIN</text>`}
   const m2=y=>`<rect x="40" y="${y}" width="100" height="20" rx="2" fill="rgba(0,0,0,.25)" stroke="#6b7385" stroke-dasharray="3 2"/><circle cx="137" cy="${y+10}" r="2" fill="#c0c4cc"/>`;
   s+=m2(130);if(it.dual)s+=m2(156)+`<text x="146" y="169" font-size="6" fill="#8a93a8" font-family="sans-serif">M.2 №2</text>`;
   const pcie=(y,w,m)=>`<rect x="15" y="${y}" width="${w}" height="7" rx="1" fill="#07090d" stroke="${m?'#d1d5db':'#555d70'}" stroke-width="${m?1.2:.6}"/><rect x="${15+w*.18}" y="${y+1}" width="1" height="5" fill="#333"/>`;
@@ -2192,8 +2416,8 @@ function caseArt(it){
   s+=`<g fill="${shade(inner,-.45)}" stroke="${shade(inner,.18)}" stroke-width="1">${[60,150,240].map(y=>`<rect x="253" y="${y}" width="7" height="40" rx="3.5"/>`).join('')}</g>`;
   s+=`<rect x="14" y="308" width="312" height="98" fill="${sh}"/><line x1="14" y1="308" x2="326" y2="308" stroke="${shade(sh,.18)}" stroke-width="2"/><g fill="${shade(sh,-.45)}">${Array.from({length:14},(_,i)=>`<rect x="${170+i*10}" y="318" width="5" height="14" rx="2"/>`).join('')}</g>`;
   for(let i=0;i<it.fans;i++)s+=fan2(294,150+i*55,23,it.fanCol||(it.rgb?'#a78bfa':'#4b5568'),{frame:1,rgb:it.rgb});
-  s+=`<text x="245" y="368" fill="${shade(sh,.38)}" font-size="12" font-family="sans-serif" font-weight="800" text-anchor="middle">${it.name}</text>`;
-  if(it.engrave)s+=`<text x="245" y="393" fill="#facc15" font-size="11" font-family="sans-serif" font-weight="900" text-anchor="middle">✦ ${esc(it.engrave)} ✦</text>`;
+  s+=`<text x="245" y="398" fill="${shade(sh,.38)}" font-size="9" font-family="sans-serif" font-weight="800" text-anchor="middle">${it.name}</text>`;
+  if(it.engrave)s+=`<text x="245" y="386" fill="#facc15" font-size="11" font-family="sans-serif" font-weight="900" text-anchor="middle">✦ ${esc(it.engrave)} ✦</text>`;
   s+=`<rect x="14" y="14" width="312" height="392" rx="9" fill="url(#${idg})" pointer-events="none"/><path d="M30 20 L90 20 L30 300 L20 300Z" fill="#fff" opacity=".04" pointer-events="none"/>`;
   return s;
 }
@@ -2517,13 +2741,20 @@ function streamTick(now,cur){
 
 // ===================== ФАНТАЗИЯ: ПРИСТАВКИ БУДУЩЕГО =====================
 const RRANK={'720p':0,'900p':.5,'1080p':1,'1440p':1.5,'4K':2,'8K':3,'16K':4};
-const allG=(m,skip=[])=>Object.fromEntries(GAMES.filter(g=>!skip.includes(g.id)).map(g=>[g.id,g.id==='mk11'?[60,60]:m]));
+const allG=(m,skip=[])=>Object.fromEntries(GAMES.filter(g=>!skip.includes(g.id)).map(g=>[g.id,g.cap?m.map(x=>Math.min(x,g.cap)):m]));
 CON.xsx={name:'Xbox Series X',pad:'x5',pads:['x5'],padN:'Xbox',res:['4K','1440p'],load:900,
   g:{fn:[60,120],mc:[60,60],rbx:[60,60],gta:[60,60],rdr:[30,30],cp:[30,60],val:[60,120],gta6:[30,30],fh6:[30,60],w3:[30,60],rust:[60,60],mk11:[60,60]},
   no:{tlou:'The Last of Us — эксклюзив PlayStation, на Xbox нет',cs2:'CS2 есть только на ПК'},desc:'4K · до 120 FPS · нужен геймпад Xbox'};
 CON.ps6={name:'PS6 🔮',pad:'x6',pads:['x6','x12','x13'],padN:'DualSense',res:['8K','4K'],load:500,g:allG([60,120],['cs2']),no:{cs2:'CS2 есть только на ПК'},desc:'🔮 приставка из будущего · 8K · до 120 FPS'};
 CON.ps6p={name:'PS6 Pro 🔮',pad:'x6',pads:['x6','x12','x13'],padN:'DualSense',res:['8K','8K'],load:400,g:allG([120,240],['cs2']),no:{cs2:'CS2 есть только на ПК'},desc:'🔮 из будущего · 8K · до 240 FPS'};
 CON.qbox={name:'Q-Box ∞ 🔮',pad:'x5',pads:['x5','x6','x11','x12','x13'],padN:'любой',res:['16K','8K'],load:100,g:allG([5000,10000]),no:{},desc:'🔮 квантовая приставка · 16K · до 10 000 FPS · любой геймпад'};
+Object.assign(CON.ps4.g,{apex:[30,60],pubg:[30,30],ow2:[30,60],genshin:[30,30],terraria:[30,60],among:[60,60],rl:[60,60],sims4:[30,30],dota:[30,30]});
+Object.assign(CON.ps4.no,{dota:'Dota 2 есть только на ПК',lol:'League of Legends есть только на ПК',ets2:'Euro Truck Simulator 2 есть только на ПК',bf6:'Battlefield 6 не выходит на PS4',elden:'Elden Ring на PS4 есть, но тормозит — бери PS5',bg3:'Baldur\'s Gate 3 не выходит на PS4',wukong:'Wukong только на PS5',kcd2:'KCD 2 только на PS5',stalker2:'S.T.A.L.K.E.R. 2 нет на PlayStation',doom:'DOOM: The Dark Ages только на PS5',hd2:'Helldivers 2 только на PS5'});
+delete CON.ps4.g.dota;
+for(const k of ['ps5','ps5p']){const pro=k==='ps5p';Object.assign(CON[k].g,{apex:[60,120],pubg:[60,60],cod:[60,120],bf6:pro?[60,120]:[60,60],ow2:[60,120],hd2:pro?[60,60]:[30,60],doom:[60,60],elden:[60,60],bg3:pro?[60,60]:[30,60],hog:pro?[60,60]:[30,60],wukong:pro?[60,60]:[30,60],kcd2:pro?[60,60]:[30,60],genshin:[60,60],silksong:[60,60],terraria:[60,60],among:[60,60],rl:[60,120],sims4:[30,60]});
+  Object.assign(CON[k].no,{dota:'Dota 2 есть только на ПК',lol:'League of Legends есть только на ПК',ets2:'Euro Truck Simulator 2 есть только на ПК',stalker2:'S.T.A.L.K.E.R. 2 нет на PlayStation — есть на Xbox и ПК',pcsim2:'Симулятор ПК 2 — только на ПК 😉',kvr:'Kvant Racing ∞ работает только на Q-Box'})}
+if(CON.xsx){Object.assign(CON.xsx.g,{apex:[60,120],pubg:[60,60],cod:[60,120],bf6:[60,60],ow2:[60,120],hd2:[30,60],doom:[60,60],elden:[60,60],bg3:[30,60],hog:[30,60],stalker2:[30,60],kcd2:[30,60],genshin:[60,60],silksong:[60,60],terraria:[60,60],among:[60,60],rl:[60,120],sims4:[30,60]});if(!CON.xsx.no)CON.xsx.no={};Object.assign(CON.xsx.no,{dota:'Dota 2 есть только на ПК',lol:'League of Legends есть только на ПК',ets2:'Euro Truck Simulator 2 есть только на ПК',wukong:'Wukong нет на Xbox',pcsim2:'Симулятор ПК 2 — только на ПК 😉',kvr:'Kvant Racing ∞ работает только на Q-Box'})}
+for(const k of ['ps6','ps6p']){const no=CON[k].no;Object.assign(no,{dota:'Dota 2 есть только на ПК',lol:'League of Legends есть только на ПК',ets2:'Euro Truck Simulator 2 есть только на ПК',pcsim2:'Симулятор ПК 2 — только на ПК 😉',kvr:'Kvant Racing ∞ работает только на Q-Box'});for(const id in no)delete CON[k].g[id]}
 function ps6art(it,pro){const pl=it.plate||'#e5e7eb';return `<path d="M14 6 L56 6 L60 104 L10 104Z" fill="#0b0c10"/><path d="M14 6 L29 6 L25 104 L10 104Z" fill="${pl}" stroke="${shade(pl,-.3)}"/><path d="M41 6 L56 6 L60 104 L45 104Z" fill="${pl}" stroke="${shade(pl,-.3)}"/><rect x="33" y="10" width="4" height="90" rx="2" class="rgbf"/>${pro?'<path d="M15 40 L27 40 M14 52 L26 52 M13 64 L25 64 M43 40 L55 40 M44 52 L56 52 M45 64 L57 64" stroke="#0b0c10" stroke-width="2.5"/>':''}${it.vert?'<ellipse cx="35" cy="106" rx="24" ry="3.5" fill="#111"/>':''}${shine(10,6,50,98,4,.15)}`}
 const CONART={
   xsx:it=>`<rect x="12" y="6" width="46" height="98" rx="4" fill="${it.plate||'#111318'}" stroke="#2f3442"/><ellipse cx="35" cy="12" rx="17" ry="3.2" fill="#16a34a" opacity=".85"/><g fill="#0b0c10">${Array.from({length:6},(_,i)=>`<circle cx="${21+i*5.6}" cy="12" r="1.5"/>`).join('')}</g><circle cx="20" cy="94" r="3" fill="#d1d5db"/>${shine(12,6,46,98,4,.12)}`,
@@ -2566,6 +2797,12 @@ const FIGS={
  f8:it=>{const c=it&&it.gold?'#ca8a04':'#78716c',[id,d]=rg(c);return d+(it&&it.gold?'<circle cx="30" cy="30" r="27" fill="#facc15" opacity=".25"/>':'')+base()+`<path d="M18 54 L16 22 Q16 6 30 6 Q44 6 44 22 L42 54Z" fill="url(#${id})"/><rect x="18" y="18" width="24" height="5" rx="2" fill="${shade(c,-.35)}"/>
  <ellipse cx="24" cy="27" rx="4" ry="3" fill="${shade(c,-.55)}"/><ellipse cx="36" cy="27" rx="4" ry="3" fill="${shade(c,-.55)}"/><path d="M30 24 L27 38 L33 38Z" fill="${shade(c,-.2)}"/><rect x="24" y="42" width="12" height="3" rx="1.5" fill="${shade(c,-.5)}"/>`+hl(24,12,5,3,.35)},
  f9:()=>dragonSVG('#eab308'),
+ f11:()=>{const [id,d]=rg('#1f2937');return d+base()+`<ellipse cx="30" cy="36" rx="15" ry="18" fill="url(#${id})"/><ellipse cx="30" cy="40" rx="10" ry="13" fill="#f8fafc"/><circle cx="30" cy="20" r="11" fill="url(#${id})"/><ellipse cx="30" cy="23" rx="7" ry="6" fill="#f8fafc"/><circle cx="26" cy="19" r="2" fill="#111"/><circle cx="34" cy="19" r="2" fill="#111"/><circle cx="26.6" cy="18.4" r=".7" fill="#fff"/><circle cx="34.6" cy="18.4" r=".7" fill="#fff"/><path d="M27 24 L30 28 L33 24Z" fill="#f59e0b"/><path d="M15 32 Q8 40 13 46" stroke="#111827" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M45 32 Q52 40 47 46" stroke="#111827" stroke-width="5" fill="none" stroke-linecap="round"/><ellipse cx="24" cy="54" rx="5" ry="2.5" fill="#f59e0b"/><ellipse cx="36" cy="54" rx="5" ry="2.5" fill="#f59e0b"/>`+hl(25,14,4,2)},
+ f12:()=>{const [id,d]=rg('#16a34a');return d+base()+`<path d="M18 44 L42 44 L39 56 L21 56Z" fill="#c2410c"/><rect x="16" y="41" width="28" height="5" rx="2" fill="#ea580c"/><rect x="24" y="14" width="12" height="30" rx="6" fill="url(#${id})"/><path d="M24 30 Q14 30 14 22 L14 18 Q14 15 17 15 Q20 15 20 18 L20 24 L24 24" fill="url(#${id})"/><path d="M36 26 Q46 26 46 18 L46 14 Q46 11 43 11 Q40 11 40 14 L40 20 L36 20" fill="url(#${id})"/>${[[27,18],[33,22],[28,30],[32,36],[17,20],[43,16]].map(([x,y])=>`<path d="M${x-1.5} ${y}h3M${x} ${y-1.5}v3" stroke="#fef9c3" stroke-width=".9"/>`).join('')}<circle cx="30" cy="12" r="3.5" fill="#f472b6"/><circle cx="30" cy="12" r="1.3" fill="#fde047"/>`+hl(27,20,1.5,4)},
+ f13:()=>{const [id,d]=rg('#92400e');return d+base()+`<ellipse cx="30" cy="35" rx="17" ry="19" fill="url(#${id})"/><path d="M14 20 L12 8 L22 16Z M46 20 L48 8 L38 16Z" fill="#78350f"/><circle cx="23" cy="26" r="8" fill="#fef3c7"/><circle cx="37" cy="26" r="8" fill="#fef3c7"/><circle cx="23" cy="26" r="4.5" fill="#f59e0b"/><circle cx="37" cy="26" r="4.5" fill="#f59e0b"/><circle cx="23" cy="26" r="2.5" fill="#111"/><circle cx="37" cy="26" r="2.5" fill="#111"/><path d="M27 32 L30 37 L33 32Z" fill="#facc15"/><path d="M20 42 Q24 40 28 42 M32 42 Q36 40 40 42 M24 47 Q28 45 32 47" stroke="#fde68a" stroke-width="1.5" fill="none"/><path d="M14 34 Q8 44 16 50" fill="#78350f"/><path d="M46 34 Q52 44 44 50" fill="#78350f"/>`+hl(22,24,1.5,1,.8)},
+ f14:()=>`${base()}<path d="M24 46 Q30 60 36 46Z" fill="#f97316"/><path d="M26 46 Q30 55 34 46Z" fill="#fde047"/><path d="M20 38 L12 50 L22 46Z M40 38 L48 50 L38 46Z" fill="#dc2626"/><path d="M30 4 Q42 16 40 46 L20 46 Q18 16 30 4Z" fill="#e5e7eb" stroke="#94a3b8"/><path d="M30 4 Q36 9 38 16 L22 16 Q24 9 30 4Z" fill="#dc2626"/><circle cx="30" cy="26" r="5.5" fill="#38bdf8" stroke="#475569" stroke-width="2"/><circle cx="28.5" cy="24.5" r="1.6" fill="#fff"/><rect x="27" y="38" width="6" height="8" fill="#dc2626"/>`+hl(25,22,2,6,.5),
+ f15:()=>`${base()}<rect x="8" y="10" width="44" height="30" rx="3" fill="#111827" stroke="#475569" stroke-width="2"/><rect x="11" y="13" width="38" height="24" rx="1" fill="#0ea5e9"/><path d="M11 30 L22 22 L30 28 L38 19 L49 27 L49 37 L11 37Z" fill="#1e3a8a" opacity=".7"/><circle cx="40" cy="18" r="3" fill="#fde047"/><rect x="26" y="40" width="8" height="8" fill="#475569"/><rect x="18" y="47" width="24" height="4" rx="2" fill="#334155"/><rect x="11" y="13" width="38" height="3" fill="#fff" opacity=".2"/>`,
+ f16:()=>`<circle cx="30" cy="32" r="26" fill="#67e8f9" opacity=".22"/>${base()}<path d="M14 24 L22 12 L38 12 L46 24 L30 52Z" fill="#a5f3fc" stroke="#e0f2fe" stroke-width="1.5"/><path d="M14 24 L46 24 L30 52Z" fill="#22d3ee" opacity=".7"/><path d="M22 12 L26 24 L30 12 L34 24 L38 12" fill="none" stroke="#ecfeff" stroke-width="1.2"/><path d="M26 24 L30 52 L34 24" fill="#0891b2" opacity=".5"/><path d="M19 18 L23 14" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><path d="M48 8 l1.5 4 4 1.5 -4 1.5 -1.5 4 -1.5 -4 -4 -1.5 4 -1.5z" fill="#fff"/>`,
  f10:()=>`<path d="M22 34 L10 56 L50 56 L38 34Z" fill="#a3e635" opacity=".35"/><ellipse cx="30" cy="22" rx="10" ry="9" fill="#67e8f9" stroke="#0891b2"/><ellipse cx="30" cy="30" rx="24" ry="7" fill="#94a3b8" stroke="#64748b"/><ellipse cx="30" cy="28" rx="24" ry="4" fill="#cbd5e1"/>
  <circle cx="14" cy="31" r="2" fill="#facc15"/><circle cx="24" cy="33" r="2" fill="#f472b6"/><circle cx="36" cy="33" r="2" fill="#22c55e"/><circle cx="46" cy="31" r="2" fill="#facc15"/><circle cx="27" cy="20" r="1.5" fill="#111"/><circle cx="33" cy="20" r="1.5" fill="#111"/>${hl(26,17,4,2,.6)}`,
 };
@@ -2624,7 +2861,7 @@ roomDecor();
 const OSD={
  win11:{n:'Windows 11',cls:'win11',start:'Пуск',mult:1,note:''},
  win10:{n:'Windows 10',cls:'win10',start:'Пуск',mult:1,note:'⚠️ Поддержка Windows 10 закончилась 14 октября 2025 — обновлений безопасности больше нет'},
- linux:{n:'Linux (Ubuntu)',cls:'linux',start:'Приложения',mult:.92,no:{val:'Античит Valorant не работает на Linux',fn:'Античит Fortnite не работает на Linux'},note:'🐧 Игры идут через Proton: FPS чуть ниже (−8%)'},
+ linux:{n:'Linux (Ubuntu)',cls:'linux',start:'Приложения',mult:.92,no:{val:'Античит Valorant не работает на Linux',fn:'Античит Fortnite не работает на Linux',lol:'Античит Vanguard в League of Legends не работает на Linux',apex:'Apex Legends отключил поддержку Linux из-за античита',cod:'Античит Warzone не работает на Linux',bf6:'Античит Battlefield 6 не работает на Linux',pubg:'Античит PUBG не работает на Linux'},note:'🐧 Игры идут через Proton: FPS чуть ниже (−8%)'},
  xp:{n:'Windows XP',cls:'xp',start:'пуск',mult:1,all:'Игре нужна Windows 10 или новее — XP слишком старая 😅',note:'🦖 Система 2001 года — современные игры не запустятся'},
  kvant:{n:'КвантОС 🔮',cls:'kvant',start:'🔮 Квант',mult:1.1,note:'🔮 Система из будущего: +10% FPS'},
 };
@@ -2657,7 +2894,7 @@ const FUPG=[
 function farmDevs(){return S.farm.racks.flat().filter(Boolean)}
 function farmStats(){
   const devs=farmDevs();let gh=0,ah=0,w=0,mc=0;
-  for(const o of devs){const it=itm(o);if(it.bps){mc++;w+=it.tdp;continue}if(it.cat==='asic'){ah+=it.hash;w+=it.tdp}else{gh+=it.score*.8*((o.wear||0)>=100?.85:1);w+=it.tdp}}
+  for(const o of devs){const it=itm(o);if(it.bps){mc+=it.bps;w+=it.tdp;continue}if(it.cat==='asic'){ah+=it.hash;w+=it.tdp}else{gh+=it.score*.8*((o.wear||0)>=100?.85:1);w+=it.tdp}}
   const cap=4+(S.farm.fans?8:0)+(S.farm.imm?999:0),hot=devs.length>cap,k=(hot?.7:1)*(S.farm.imm?1.1:1);
   const nm=1+nftBoost(),mcb=mc*nm;gh*=k*nm;ah*=k*nm;const pm=S.farm.reactor?0:S.farm.solar?.2:S.farm.night?.7:1;
   const cost=w/250*pm,btc=S.farm.mode==='btc'?(gh+ah)*6.25e-8:ah*6.25e-8,usd=S.farm.mode==='btc'?0:gh/20;
@@ -2745,13 +2982,14 @@ function enterAccount(key,isNew,asAdmin){
   try{data=JSON.parse(localStorage.getItem('pcbuilder2d_v1:'+key))}catch(e){}
   if(!data){try{if(!localStorage.getItem('pcb_migrated')){const old=localStorage.getItem('pcbuilder2d_v1');if(old){data=JSON.parse(old);localStorage.setItem('pcb_migrated','1')}}}catch(e){}}
   KEY='pcbuilder2d_v1:'+key;NICK=a[key].n;IS_ADMIN=key===ADMIN_NICK.toLowerCase();
-  window.LOGGED=true;applySave(data);ensurePid(key);applySettings();
+  window.LOGGED=true;applySave(data);ensurePid(key);applySettings();{const a2=accs();if(a2[key]){a2[key].last=Date.now();saveAccs(a2)}}
   try{sessionStorage.setItem('pcb_session',key);if(!localStorage.getItem('pcb_noremember'))localStorage.setItem('pcb_remember',key)}catch(e){}
   $('#login').classList.remove('show');$('#nickBadge').textContent=NICK+(IS_ADMIN?' 🛡️':'');$('#adminOpen').style.display=IS_ADMIN?'':'none';$('#admTop').style.display=IS_ADMIN?'':'none';document.body.classList.toggle('isadm',IS_ADMIN);
   showTab('shop');save();dailyCheck();farmOffline();
   toast(isNew?`👋 Аккаунт ${NICK} создан!`:`👋 С возвращением, ${NICK}!`,'ok');
   if(IS_ADMIN&&asAdmin)setTimeout(openAdmin,700);
   setTimeout(()=>processInbox(key),1500);
+  setTimeout(()=>{checkBan();loadBans()},900);
 }
 function doLogin(asAdmin){
   const nick=$('#lgNick').value.trim(),pass=$('#lgPass').value,err=$('#lgErr');err.textContent='';
@@ -2761,7 +2999,7 @@ function doLogin(asAdmin){
   const h=cyrb53('pcb:'+pass),a=accs(),key=nick.toLowerCase();
   if(asAdmin&&(nick!==ADMIN_NICK||h!==ADMIN_HASH)){snd('bad');return err.textContent='❌ Неверный ник или пароль админа'}
   let isNew=false;
-  if(a[key]){if(a[key].h!==h){snd('bad');return err.textContent='❌ Неверный пароль'}}
+  if(a[key]){if(a[key].h!==h){snd('bad');return err.textContent='❌ Неверный пароль'}if(a[key].banned&&key!==ADMIN_NICK.toLowerCase()){snd('bad');return err.textContent='🚫 Этот аккаунт забанен админом'}}
   else{a[key]={h,n:nick,c:Date.now()};isNew=true;saveAccs(a)}
   enterAccount(key,isNew,asAdmin);
 }
@@ -2777,7 +3015,7 @@ function openAdmin(){
   const grp={...CATS,asic:'ASIC-майнеры'};
   const opts=Object.entries(grp).map(([c,n])=>`<optgroup label="${n}">${CATALOG.filter(i=>i.cat===c).map(i=>`<option value="${i.id}">${esc(i.name)} — ${fmt(i.price)}</option>`).join('')}</optgroup>`).join('');
   const a=accs();
-  $('#sheet').innerHTML=`<div class="pshead" style="background:linear-gradient(90deg,#7f1d1d,#dc2626)">🛡️ Админ-панель<small>Вы вошли как ${NICK} · деньги: ${fmt(S.money)} · ₿ ${S.btc.toFixed(4)}</small></div>${adminGiftHTML()}
+  $('#sheet').innerHTML=`<div class="pshead" style="background:linear-gradient(90deg,#7f1d1d,#dc2626)">🛡️ Админ-панель<small>Вы вошли как ${NICK} · деньги: ${fmt(S.money)} · ₿ ${S.btc.toFixed(4)}</small></div>${adminPlayersHTML()}${adminGiftHTML()}
   <div class="csec"><b>💰 Деньги</b><div class="haggle" style="margin-top:4px"><input id="adMoney" type="number" inputmode="numeric" value="1000000"><button class="btn sm g" data-ad="money">Выдать</button></div><div class="qk"><button data-adq="1000000">+1M</button><button data-adq="100000000">+100M</button><button data-adq="1000000000">+1B</button><button data-adq="0">Обнулить</button></div></div>
   <div class="csec"><b>₿ Биткоин</b><div class="haggle" style="margin-top:4px"><input id="adBtc" type="number" value="1"><button class="btn sm g" data-ad="btc">Выдать BTC</button></div></div>
   <div class="csec"><b>📦 Выдать предмет</b><div class="haggle" style="margin-top:4px"><select id="adItem" class="adsel">${opts}</select><input id="adQty" type="number" value="1" min="1" max="50" style="max-width:56px;flex:none"><button class="btn sm g" data-ad="item">Выдать</button></div></div>
@@ -2788,9 +3026,8 @@ function openAdmin(){
    <button class="btn" data-ad="event">📰 Новое событие рынка</button><button class="btn" data-ad="wheel">🎡 Сбросить колесо</button>
    <button class="btn" data-ad="orders">📋 Новые заказы</button><button class="btn" data-ad="dust">🧹 Убрать пыль с приставки</button>
   </div>
-  <div class="csec"><b>👥 Аккаунты на этом устройстве</b>${Object.entries(a).map(([k,v])=>`<div class="accrow"><span>${k===ADMIN_NICK.toLowerCase()?'🛡️':'👤'} ${esc(v.n)}${k===NICK.toLowerCase()?' <span class="mut">(ты)</span>':''}</span>${k===ADMIN_NICK.toLowerCase()||k===NICK.toLowerCase()?'':`<button class="btn sm" data-addel="${esc(k)}">🗑️ Удалить</button>`}</div>`).join('')}</div>
   <button class="btn" data-ad="reset" style="color:#f87171">♻️ Сбросить прогресс этого аккаунта</button><button class="btn" id="clBtn">Закрыть</button>`;
-  sheetBg.classList.add('show');$('#clBtn').onclick=closeSheet;bindAdminGift();
+  sheetBg.classList.add('show');$('#clBtn').onclick=closeSheet;bindAdminGift();bindAdminPlayers();
   $('#sheet').querySelectorAll('[data-adq]').forEach(b=>b.onclick=()=>{const v=+b.dataset.adq;if(v===0)S.money=0;else S.money+=v;adMsg(v?`+${fmt(v)}`:'Деньги обнулены');openAdmin()});
   $('#sheet').querySelectorAll('[data-addel]').forEach(b=>b.onclick=()=>{const k=b.dataset.addel,a2=accs();delete a2[k];saveAccs(a2);try{localStorage.removeItem('pcbuilder2d_v1:'+k)}catch(e){}adMsg('Аккаунт удалён');openAdmin()});
   let resetArm2=0;
@@ -2816,7 +3053,7 @@ function openAdmin(){
 }
 
 // ===== Видеокарта «Майнинг»: 1 BTC в секунду =====
-function pcBps(){let n=0;for(const z of ['gpu','gpu2'])if(S.inst[z]&&itm(S.inst[z]).bps&&!(S.inst[z].broken))n++;return n}
+function pcBps(){let n=0;for(const z of ['gpu','gpu2'])if(S.inst[z]&&itm(S.inst[z]).bps&&!(S.inst[z].broken))n+=itm(S.inst[z]).bps;return n}
 setInterval(()=>{if(!window.LOGGED)return;let add=0;
   if(S.farm&&S.farm.on){const f=farmStats();if(f.mc&&S.money>=0)add+=f.mcb}
   if(S.mining&&S.on&&!T.running&&!R.running)add+=pcBps()*(1+nftBoost());
@@ -3088,6 +3325,89 @@ $('#t-prof').addEventListener('click',e=>{
 
 $('#admTop').onclick=()=>{if(!IS_ADMIN)return;if(T.running||R.running)return toast('Сначала выйди из игры','bad');openAdmin()};
 (function autoLogin(){try{const k=sessionStorage.getItem('pcb_session')||localStorage.getItem('pcb_remember');const a=accs();if(k&&a[k]){enterAccount(k,false,false)}}catch(e){}})();
+// ===== Двойная материнка (2 процессора, 2 кулера, 2 БП) и боковые вентиляторы =====
+const ZBOX0={};for(const z in ZONES)ZBOX0[z]=ZONES[z].box;
+const ZTW={cpu:[28,60,50,50],cooler:[22,54,62,62],cpu2:[92,60,50,50],cooler2:[86,54,62,62],psu:[22,314,118,44],psu2:[22,360,118,44]};
+function zlayout(){const tw=!!(S.inst&&S.inst.mobo&&BY[S.inst.mobo.id]&&BY[S.inst.mobo.id].twin);for(const z in ZONES)ZONES[z].box=(tw&&ZTW[z])||ZBOX0[z]}
+function sideFans(){return ['sf1','sf2','sf3'].map(z=>got(z)).filter(Boolean)}
+function caseAir(){return airOf(got('case'))+sideFans().reduce((a,f)=>a+(f.air||0),0)}
+function psuCap(){return (got('psu')?got('psu').w:0)+(got('psu2')?got('psu2').w:0)}
+function fanArt(it){return fan2(30,30,25,it.col,{frame:1,rgb:it.rgb})+(it.rgb?`<rect x="3" y="3" width="54" height="54" rx="7" fill="none" stroke-width="2.5" class="rgb" stroke="${it.col}"/>`:'')}
+ART2.fan=fanArt;
+// ===================== БАНЫ И ИГРОКИ (админ) =====================
+// bans.json лежит рядом с игрой на GitHub: {"ban":["12345678"],"reset":{"12345678":1700000000000}}
+let BANS={ban:[],reset:{}};
+function bansMaster(){try{return JSON.parse(localStorage.getItem('pcb_banmaster'))||null}catch(e){return null}}
+function saveBansMaster(b){try{localStorage.setItem('pcb_banmaster',JSON.stringify(b))}catch(e){}}
+async function loadBans(){try{if(!/^https?:/.test(location.protocol))return;const r=await fetch('bans.json?'+Date.now(),{cache:'no-store'});if(!r.ok)return;const j=await r.json();BANS={ban:(j.ban||[]).map(String),reset:j.reset||{}};checkBan()}catch(e){}}
+function showBan(reason){let ov=$('#banOv');if(!ov){ov=document.createElement('div');ov.id='banOv';document.body.appendChild(ov)}
+  ov.innerHTML=`<div class="banbox"><div style="font-size:56px">🚫</div><b style="font-size:22px">Ты забанен</b><p class="mut">${esc(reason||'Админ заблокировал этот аккаунт')}</p><div class="mut" style="font-size:13px">Ник: <b>${esc(NICK)}</b> · ID: <b>${S.pid}</b></div><button class="btn" id="banOut" style="margin-top:12px;width:100%">🚪 Выйти из аккаунта</button></div>`;
+  ov.style.display='flex';$('#banOut').onclick=()=>{ov.style.display='none';$('#logoutBtn').click()}}
+function checkBan(){
+  if(!window.LOGGED||IS_ADMIN||!S.pid)return;
+  const a=accs(),acc=a[NICK.toLowerCase()];
+  if(acc&&acc.banned)return showBan(acc.banR);
+  if(BANS.ban.includes(String(S.pid)))return showBan('Админ заблокировал этот ID');
+  const ts=+BANS.reset[S.pid]||0;
+  if(ts&&(S.resetAt||0)<ts){const pid=S.pid,av=S.avatar,st=S.set;applySave(null);S.pid=pid;S.avatar=av;S.set=st;S.resetAt=ts;save();toast('♻️ Админ обнулил твой прогресс','bad');showTab('shop')}
+}
+setInterval(loadBans,180000);
+function accSave(k){try{return JSON.parse(localStorage.getItem('pcbuilder2d_v1:'+k))}catch(e){return null}}
+function adminPlayersHTML(){
+  const a=accs(),me=NICK.toLowerCase(),M=bansMaster()||{ban:[...BANS.ban],reset:{...BANS.reset}};
+  const rows=Object.entries(a).map(([k,v])=>{const sv=k===me?S:accSave(k)||{},adm=k===ADMIN_NICK.toLowerCase();
+    return `<div class="plrow ${v.banned?'banned':''}"><div class="plinfo"><b>${adm?'🛡️':v.banned?'🚫':'👤'} ${esc(v.n)}${k===me?' <span class="mut">(ты)</span>':''}</b><small>ID: <b>${v.id||'—'}</b> · ${fmt(sv.money||0)} · ₿${fb(sv.btc||0)}${v.last?' · был: '+new Date(v.last).toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):''}</small></div>
+    ${adm||k===me?'':`<div class="plbtns"><button class="btn sm" data-pban="${esc(k)}">${v.banned?'✅ Разбан':'🚫 Бан'}</button><button class="btn sm" data-preset="${esc(k)}">♻️ Обнулить</button><button class="btn sm" data-addel="${esc(k)}">🗑️</button></div>`}</div>`}).join('');
+  return `<div class="csec plbox"><b>👥 Игроки на этом устройстве (${Object.keys(a).length})</b>${rows}</div>
+  <div class="csec plbox"><b>🌐 Бан и обнуление по ID (для всех телефонов)</b>
+   <div class="mut" style="font-size:11px;margin:3px 0 6px">Работает у всех, кто играет через сайт или APK: список хранится в файле <b>bans.json</b> на GitHub, игра проверяет его каждые 3 минуты.</div>
+   <div class="haggle"><input id="rbId" inputmode="numeric" maxlength="8" placeholder="ID игрока"><button class="btn sm" data-rb="ban" style="background:#7f1d1d">🚫 Бан</button><button class="btn sm" data-rb="reset">♻️ Обнулить</button></div>
+   <div style="margin-top:6px">${M.ban.length?M.ban.map(id=>`<div class="accrow"><span>🚫 ${id}</span><button class="btn sm" data-runban="${id}">✅ Разбан</button></div>`).join(''):'<div class="mut" style="font-size:12px">Забаненных по ID нет</div>'}
+   ${Object.keys(M.reset).length?`<div class="mut" style="font-size:12px;margin-top:4px">♻️ Обнулены: ${Object.keys(M.reset).join(', ')}</div>`:''}</div>
+   <button class="btn g" id="rbCopy" style="width:100%;margin-top:6px">📋 Скопировать bans.json</button>
+   <div class="mut" style="font-size:11px;margin-top:4px">После изменений скопируй и вставь текст в файл <b>bans.json</b> в репозитории игры на GitHub (Add file → Create new file или ✏️ Edit) → Commit.</div></div>`}
+function bindAdminPlayers(){
+  const sh=$('#sheet');
+  sh.querySelectorAll('[data-pban]').forEach(b=>b.onclick=()=>{const k=b.dataset.pban,a=accs();if(!a[k])return;a[k].banned=!a[k].banned;if(a[k].banned)a[k].banR='Админ заблокировал этот аккаунт';else delete a[k].banR;saveAccs(a);if(!a[k].banned)try{if(localStorage.getItem('pcb_remember')===k);}catch(e){}adMsg(a[k].banned?`🚫 ${a[k].n} забанен`:`✅ ${a[k].n} разбанен`);openAdmin()});
+  let armK='',armT=0;
+  sh.querySelectorAll('[data-preset]').forEach(b=>b.onclick=()=>{const k=b.dataset.preset,a=accs();if(!a[k])return;if(armK!==k||Date.now()>armT){armK=k;armT=Date.now()+3000;return toast(`Нажми ещё раз, чтобы обнулить ${a[k].n}`,'bad')}
+    const old=accSave(k)||{},f=fresh();f.pid=a[k].id||old.pid||'';f.avatar=old.avatar||'';f.set=old.set||{};f.giftUsed=old.giftUsed||[];try{localStorage.setItem('pcbuilder2d_v1:'+k,JSON.stringify(f))}catch(e){}adMsg(`♻️ Прогресс ${a[k].n} обнулён`);openAdmin()});
+  const M=()=>bansMaster()||{ban:[...BANS.ban],reset:{...BANS.reset}};
+  sh.querySelectorAll('[data-rb]').forEach(b=>b.onclick=()=>{const id=$('#rbId').value.replace(/\D/g,'');if(id.length!==8)return toast('Введи ID из 8 цифр','bad');const m=M();
+    if(b.dataset.rb==='ban'){if(!m.ban.includes(id))m.ban.push(id)}else m.reset[id]=Date.now();
+    saveBansMaster(m);const a=accs(),k=Object.keys(a).find(x=>a[x].id===id);
+    if(k&&b.dataset.rb==='ban'){a[k].banned=true;a[k].banR='Админ заблокировал этот ID';saveAccs(a)}
+    if(k&&b.dataset.rb==='reset'){const old=accSave(k)||{},f=fresh();f.pid=id;f.avatar=old.avatar||'';f.resetAt=m.reset[id];try{localStorage.setItem('pcbuilder2d_v1:'+k,JSON.stringify(f))}catch(e){}}
+    adMsg(b.dataset.rb==='ban'?`🚫 ID ${id} добавлен в бан-лист — обнови bans.json на GitHub`:`♻️ ID ${id} будет обнулён — обнови bans.json на GitHub`);openAdmin()});
+  sh.querySelectorAll('[data-runban]').forEach(b=>b.onclick=()=>{const id=b.dataset.runban,m=M();m.ban=m.ban.filter(x=>x!==id);saveBansMaster(m);const a=accs(),k=Object.keys(a).find(x=>a[x].id===id);if(k){a[k].banned=false;delete a[k].banR;saveAccs(a)}adMsg(`✅ ID ${id} разбанен — обнови bans.json на GitHub`);openAdmin()});
+  $('#rbCopy').onclick=()=>copyText(JSON.stringify(M(),null,1),'bans.json скопирован');
+}
+FIGS.bfig=()=>{let s='<circle cx="30" cy="34" r="27" fill="#facc15" opacity=".25"/>'+base();const bar=(x,y)=>`<path d="M${x} ${y} L${x+16} ${y} L${x+19} ${y+8} L${x-3} ${y+8}Z" fill="#facc15" stroke="#a16207" stroke-width=".8"/><path d="M${x+1} ${y+1} L${x+15} ${y+1}" stroke="#fef9c3" stroke-width="1.2"/>`;
+  for(const [x,y] of [[6,46],[22,46],[38,46],[14,38],[30,38],[22,30]])s+=bar(x,y);return s+'<text x="30" y="24" font-size="13" font-weight="900" text-anchor="middle" fill="#fde047" stroke="#713f12" stroke-width=".6" font-family="sans-serif">$1B</text><path d="M48 8 l1.5 4 4 1.5 -4 1.5 -1.5 4 -1.5 -4 -4 -1.5 4 -1.5z" fill="#fff"/>'};
+GI.dota=["#991b1b", "#450a0a", "<path d=\"M8 32 L8 12 L14 8 L32 26 L32 32Z\" fill=\"#fca5a5\" opacity=\".25\"/><path d=\"M10 30 L30 10 M14 30 L30 14\" stroke=\"#fff\" stroke-width=\"3\"/><circle cx=\"12\" cy=\"12\" r=\"3\" fill=\"#fde047\"/><circle cx=\"28\" cy=\"28\" r=\"3\" fill=\"#fde047\"/>"];
+GI.lol=["#1e3a8a", "#0b1430", "<circle cx=\"20\" cy=\"20\" r=\"12\" fill=\"none\" stroke=\"#fbbf24\" stroke-width=\"2.5\"/><path d=\"M15 12 L15 28 L26 28\" stroke=\"#fbbf24\" stroke-width=\"3.5\" fill=\"none\"/>"];
+GI.apex=["#dc2626", "#7f1d1d", "<path d=\"M20 6 L34 32 L26 32 L20 20 L14 32 L6 32Z\" fill=\"#fff\"/><path d=\"M17 28 L23 28 L20 23Z\" fill=\"#dc2626\"/>"];
+GI.pubg=["#facc15", "#a16207", "<ellipse cx=\"18\" cy=\"22\" rx=\"11\" ry=\"9\" fill=\"#1f2937\"/><ellipse cx=\"18\" cy=\"22\" rx=\"7\" ry=\"5.5\" fill=\"#fef3c7\"/><circle cx=\"18\" cy=\"22\" r=\"3\" fill=\"#f59e0b\"/><rect x=\"27\" y=\"20\" width=\"10\" height=\"4\" rx=\"2\" fill=\"#1f2937\"/>"];
+GI.cod=["#4d7c0f", "#1a2e05", "<path d=\"M20 6 L30 11 L30 22 Q30 30 20 34 Q10 30 10 22 L10 11Z\" fill=\"#1f2937\" stroke=\"#a3e635\" stroke-width=\"2\"/><path d=\"M15 21 L19 25 L26 16\" stroke=\"#a3e635\" stroke-width=\"3\" fill=\"none\"/>"];
+GI.bf6=["#f97316", "#431407", "<circle cx=\"20\" cy=\"20\" r=\"8\" fill=\"#fde047\"/><path d=\"M20 4 L22 14 L32 10 L25 18 L36 20 L25 22 L32 30 L22 26 L20 36 L18 26 L8 30 L15 22 L4 20 L15 18 L8 10 L18 14Z\" fill=\"#fb923c\" opacity=\".8\"/><text x=\"20\" y=\"24\" font-size=\"10\" font-weight=\"900\" text-anchor=\"middle\" fill=\"#431407\" font-family=\"sans-serif\">6</text>"];
+GI.ow2=["#f97316", "#9a3412", "<circle cx=\"20\" cy=\"20\" r=\"13\" fill=\"none\" stroke=\"#fff\" stroke-width=\"3.5\"/><path d=\"M14 14 L18 26 M26 14 L22 26\" stroke=\"#fff\" stroke-width=\"3.5\" stroke-linecap=\"round\"/>"];
+GI.hd2=["#facc15", "#3f3f46", "<path d=\"M10 14 Q20 4 30 14 L30 24 Q20 30 10 24Z\" fill=\"#27272a\"/><rect x=\"13\" y=\"16\" width=\"14\" height=\"5\" rx=\"2\" fill=\"#facc15\"/><path d=\"M8 30 L32 30\" stroke=\"#27272a\" stroke-width=\"3\"/>"];
+GI.doom=["#dc2626", "#1c0505", "<path d=\"M10 30 L8 12 L14 18 L20 8 L26 18 L32 12 L30 30Z\" fill=\"#450a0a\" stroke=\"#f97316\" stroke-width=\"2\"/><circle cx=\"16\" cy=\"22\" r=\"2.5\" fill=\"#fde047\"/><circle cx=\"24\" cy=\"22\" r=\"2.5\" fill=\"#fde047\"/>"];
+GI.elden=["#ca8a04", "#1c1405", "<circle cx=\"20\" cy=\"20\" r=\"12\" fill=\"none\" stroke=\"#fde047\" stroke-width=\"1.5\"/><path d=\"M20 6 L20 34 M12 12 Q20 22 28 12 M12 28 Q20 18 28 28\" stroke=\"#fde047\" stroke-width=\"2\" fill=\"none\"/>"];
+GI.bg3=["#7c3aed", "#1e0638", "<path d=\"M20 5 L33 13 L33 27 L20 35 L7 27 L7 13Z\" fill=\"#c4b5fd\" stroke=\"#fff\" stroke-width=\"1.5\"/><text x=\"20\" y=\"25\" font-size=\"13\" font-weight=\"900\" text-anchor=\"middle\" fill=\"#4c1d95\" font-family=\"sans-serif\">20</text>"];
+GI.hog=["#1e293b", "#020617", "<path d=\"M12 8 L30 30\" stroke=\"#a16207\" stroke-width=\"3\" stroke-linecap=\"round\"/><path d=\"M29 10 l1.5 4 4 1.5 -4 1.5 -1.5 4 -1.5 -4 -4 -1.5 4 -1.5z\" fill=\"#fde047\"/><circle cx=\"12\" cy=\"30\" r=\"1.5\" fill=\"#fde047\"/><circle cx=\"8\" cy=\"22\" r=\"1\" fill=\"#fde047\"/>"];
+GI.wukong=["#f59e0b", "#7c2d12", "<path d=\"M6 30 L34 10\" stroke=\"#fde047\" stroke-width=\"3.5\" stroke-linecap=\"round\"/><circle cx=\"6\" cy=\"30\" r=\"3\" fill=\"#dc2626\"/><circle cx=\"34\" cy=\"10\" r=\"3\" fill=\"#dc2626\"/><path d=\"M8 12 Q14 6 20 10\" stroke=\"#fff\" stroke-width=\"2\" fill=\"none\"/>"];
+GI.kcd2=["#65a30d", "#1a2e05", "<path d=\"M8 32 L8 14 L12 14 L12 10 L16 10 L16 14 L24 14 L24 10 L28 10 L28 14 L32 14 L32 32Z\" fill=\"#e5e7eb\"/><rect x=\"17\" y=\"22\" width=\"6\" height=\"10\" rx=\"3\" fill=\"#3f3f46\"/>"];
+GI.stalker2=["#57534e", "#1c1917", "<circle cx=\"20\" cy=\"20\" r=\"4\" fill=\"#facc15\"/><path d=\"M20 20 L13 8 A14 14 0 0 1 27 8Z M20 20 L34 20 A14 14 0 0 1 27 32Z M20 20 L13 32 A14 14 0 0 1 6 20Z\" fill=\"#facc15\"/>"];
+GI.genshin=["#38bdf8", "#7c3aed", "<path d=\"M20 6 Q24 16 34 20 Q24 24 20 34 Q16 24 6 20 Q16 16 20 6Z\" fill=\"#fef9c3\"/><circle cx=\"20\" cy=\"20\" r=\"3\" fill=\"#f472b6\"/>"];
+GI.silksong=["#1e293b", "#020617", "<path d=\"M14 14 Q12 6 16 4 Q16 10 18 12 M26 14 Q28 6 24 4 Q24 10 22 12\" stroke=\"#f8fafc\" stroke-width=\"2\" fill=\"none\"/><ellipse cx=\"20\" cy=\"18\" rx=\"7\" ry=\"6\" fill=\"#f8fafc\"/><ellipse cx=\"17\" cy=\"18\" rx=\"1.6\" ry=\"2.4\" fill=\"#111\"/><ellipse cx=\"23\" cy=\"18\" rx=\"1.6\" ry=\"2.4\" fill=\"#111\"/><path d=\"M14 24 L26 24 L28 34 L12 34Z\" fill=\"#dc2626\"/>"];
+GI.terraria=["#16a34a", "#14532d", "<rect x=\"8\" y=\"22\" width=\"24\" height=\"12\" fill=\"#92400e\"/><rect x=\"8\" y=\"20\" width=\"24\" height=\"4\" fill=\"#4ade80\"/><circle cx=\"20\" cy=\"12\" r=\"7\" fill=\"#22c55e\"/><rect x=\"18\" y=\"14\" width=\"4\" height=\"8\" fill=\"#78350f\"/>"];
+GI.among=["#ef4444", "#7f1d1d", "<rect x=\"10\" y=\"10\" width=\"18\" height=\"22\" rx=\"9\" fill=\"#ef4444\" stroke=\"#111\" stroke-width=\"2\"/><rect x=\"18\" y=\"14\" width=\"14\" height=\"8\" rx=\"4\" fill=\"#bae6fd\" stroke=\"#111\" stroke-width=\"2\"/><rect x=\"6\" y=\"16\" width=\"5\" height=\"12\" rx=\"2\" fill=\"#b91c1c\" stroke=\"#111\" stroke-width=\"1.5\"/>"];
+GI.rl=["#2563eb", "#f97316", "<circle cx=\"20\" cy=\"20\" r=\"10\" fill=\"#e5e7eb\" stroke=\"#111\" stroke-width=\"1.5\"/><path d=\"M14 14 L20 18 L26 14 M14 26 L20 22 L26 26 M20 18 L20 22\" stroke=\"#111\" stroke-width=\"1.5\" fill=\"none\"/>"];
+GI.ets2=["#f59e0b", "#78350f", "<rect x=\"5\" y=\"14\" width=\"18\" height=\"14\" rx=\"1\" fill=\"#e5e7eb\"/><path d=\"M23 18 L31 18 L35 24 L35 28 L23 28Z\" fill=\"#2563eb\"/><circle cx=\"11\" cy=\"30\" r=\"3\" fill=\"#111\"/><circle cx=\"29\" cy=\"30\" r=\"3\" fill=\"#111\"/>"];
+GI.sims4=["#22c55e", "#14532d", "<path d=\"M20 4 L28 18 L20 36 L12 18Z\" fill=\"#86efac\" stroke=\"#fff\" stroke-width=\"1.5\"/><path d=\"M12 18 L28 18 M20 4 L20 36\" stroke=\"#fff\" stroke-width=\"1\" opacity=\".6\"/>"];
+GI.pcsim2=["#4ade80", "#0b0d12", "<rect x=\"8\" y=\"8\" width=\"24\" height=\"17\" rx=\"2\" fill=\"#111827\" stroke=\"#4ade80\" stroke-width=\"2\"/><text x=\"20\" y=\"21\" font-size=\"9\" font-weight=\"900\" text-anchor=\"middle\" fill=\"#4ade80\" font-family=\"sans-serif\">2</text><rect x=\"16\" y=\"26\" width=\"8\" height=\"4\" fill=\"#4ade80\"/><rect x=\"12\" y=\"30\" width=\"16\" height=\"3\" rx=\"1\" fill=\"#4ade80\"/>"];
+GI.kvr=["#7c3aed", "#22d3ee", "<path d=\"M6 26 L14 18 L28 18 L34 26Z\" fill=\"#0f172a\"/><path d=\"M14 18 L18 12 L26 12 L28 18Z\" fill=\"#22d3ee\"/><circle cx=\"12\" cy=\"28\" r=\"3\" fill=\"#f0abfc\"/><circle cx=\"28\" cy=\"28\" r=\"3\" fill=\"#f0abfc\"/><path d=\"M2 22 L8 22 M1 26 L6 26\" stroke=\"#f0abfc\" stroke-width=\"1.5\"/>"];
 // старт
 evTick();
 if(!S.inv.length&&!Object.keys(S.inst).length&&S.money===1500)setTimeout(()=>toast('👋 У тебя $1 500 — купи детали и собери ПК!'),400);
